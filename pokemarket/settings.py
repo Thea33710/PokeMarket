@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 import os
 
 load_dotenv()
@@ -73,14 +74,10 @@ WSGI_APPLICATION = 'pokemarket.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pokemarket',
-        'USER': 'pokemarket_user',
-        'PASSWORD': 'pokemarket_pass',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default="postgres://pokemarket_user:pokemarket_pass@localhost:5432/pokemarket",
+        conn_max_age=600,
+    )
 }
 
 
