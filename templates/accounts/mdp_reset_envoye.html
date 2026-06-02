@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Email envoyé — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1 style="color: #4a1472; margin-bottom: 0.5rem;">
+        📧 Email envoyé !
+    </h1>
+    <p style="color: #666; margin-bottom: 1.5rem;">
+        Si un compte existe avec cet email, tu vas recevoir un lien pour réinitialiser ton mot de passe.
+    </p>
+    <p style="color: #666; margin-bottom: 1.5rem;">
+        N'oublie pas de vérifier tes spams 🗑️
+    </p>
+    <a href="/auth/connexion/" class="btn">Retour à la connexion</a>
+</div>
+{% endblock %}

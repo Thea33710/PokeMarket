@@ -1,0 +1,12 @@
+Salut !
+
+Tu as demandé à réinitialiser ton mot de passe sur PokéMarket.
+
+Clique sur ce lien pour choisir un nouveau mot de passe :
+{{ protocol }}://{{ domain }}/auth/mdp-reset/{{ uid }}/{{ token }}/
+
+Ce lien expire dans 24h.
+
+Si tu n'as pas demandé ça, ignore cet email — ton compte est en sécurité 🔒
+
+À bientôt sur PokéMarket ! 🎮

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Mot de passe oublié — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="color: #4a1472; margin-bottom: 0.5rem;">
+        Mot de passe oublié 🔑
+    </h1>
+    <p style="color: #666; margin-bottom: 1.5rem;">
+        Entre ton email et on t'envoie un lien pour créer un nouveau mot de passe.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.email }}
+        </div>
+        <button type="submit" class="btn">Envoyer le lien 📧</button>
+        <p style="margin-top: 1rem;">
+            <a href="/auth/connexion/" style="color: #7030a0;">Retour à la connexion</a>
+        </p>
+    </form>
+</div>
+{% endblock %}
