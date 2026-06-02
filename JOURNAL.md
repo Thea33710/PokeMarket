@@ -70,3 +70,22 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Connexion + déconnexion + reset mot de passe (US-03)
 - Templates de base (base.html + HTMX + CSS responsive)
 - GitHub Actions CI/CD
+
+## Session 2 (suite) — Reset mot de passe
+
+### Ce qu'on a fait
+- Ajouté les 4 URLs de reset mot de passe dans accounts/urls.py
+- Créé les 4 templates : mdp_reset, mdp_reset_envoye, mdp_reset_confirm, mdp_reset_termine
+- Créé le template email mdp_reset_email.txt
+
+### Problèmes rencontrés
+- http:// en double dans le lien email
+  → Solution : enlever le http:// manuel, {{ protocol }} le met déjà tout seul
+
+### État actuel
+- Reset mot de passe complet et fonctionnel ✅
+
+### Prochaines étapes
+- Templates de base HTMX + CSS responsive
+- GitHub Actions CI/CD
+- Déploiement Render
