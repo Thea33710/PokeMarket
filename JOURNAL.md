@@ -46,3 +46,27 @@
 - Templates de base (base.html + HTMX + CSS responsive)
 - GitHub Actions CI/CD
 - Déploiement Render
+
+## Session 2 — Sprint 1 — Inscription + Auth
+
+### Ce qu'on a fait
+- Configuré l'email en mode console (affiche dans le terminal)
+- Créé accounts/forms.py → formulaire d'inscription
+- Créé accounts/views.py → vues inscription, activation, connexion, déconnexion
+- Créé accounts/urls.py → routes /auth/...
+- Créé l'app core pour la page d'accueil
+- Créé les templates : base.html, inscription.html, connexion.html, accueil.html
+- Testé le flux complet : inscription → email → activation → connexion ✅
+
+### Problèmes rencontrés
+Aucun ! Tout a fonctionné du premier coup 🎉
+
+### État actuel
+- Branche active : dev
+- Flux d'authentification complet et fonctionnel ✅
+- Templates de base créés ✅
+
+### Prochaines étapes
+- Connexion + déconnexion + reset mot de passe (US-03)
+- Templates de base (base.html + HTMX + CSS responsive)
+- GitHub Actions CI/CD
