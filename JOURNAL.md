@@ -159,3 +159,10 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Tâches complétées : 8/8 ✅
 - Tests : 8 tests, 93% couverture ✅
 - Site en ligne : https://pokemarket-r00f.onrender.com ✅
+
+## Note — Base de données Render
+- BDD gratuite expire après 90 jours
+- Solution : supprimer + recréer une nouvelle BDD gratuite
+- Mettre à jour DATABASE_URL dans les variables Render
+- Relancer migrate → tout repart !
+- Date limite approximative : fin août 2026
