@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'pokemarket-r00f.onrender.com']
 
 
 # Application definition
@@ -130,4 +130,4 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/auth/connexion/'
 
 # Sécurité production
-CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://pokemarket-r00f.onrender.com']
