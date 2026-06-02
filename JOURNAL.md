@@ -135,3 +135,27 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - 8 tests, 93% couverture ✅
 
 ### Sprint 1 — TERMINÉ ! 🎉
+
+## Sprint Review — Sprint 1
+
+### Ce qui a bien marché
+- Django + PostgreSQL connectés
+- Flux auth complet (inscription, email, activation, connexion, reset mdp)
+- GitHub Actions vert
+- Site déployé sur Render ✅
+
+### Ce qui a pris du temps
+- Droits PostgreSQL (2 fois !)
+- GitHub Actions rouge au premier essai (pas de tests)
+- URL Render différente de ce qu'on attendait
+- Cache navigateur
+
+### Leçons apprises
+- Donner CREATEDB à pokemarket_user dès le début
+- Tester en onglet privé après déploiement
+- Vérifier l'URL exacte Render avant ALLOWED_HOSTS
+
+### Métriques Sprint 1
+- Tâches complétées : 8/8 ✅
+- Tests : 8 tests, 93% couverture ✅
+- Site en ligne : https://pokemarket-r00f.onrender.com ✅
