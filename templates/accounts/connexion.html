@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="color: #4a1472; margin-bottom: 0.5rem;">Connexion 🔐</h1>
+    <p style="color: #666; margin-bottom: 1.5rem;">Content de te revoir !</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="error-text">{{ form.username.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Mot de passe</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <p class="error-text">{{ form.password.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+            <p class="error-text">{{ form.non_field_errors.0 }}</p>
+        {% endif %}
+
+        <button type="submit" class="btn">Se connecter 🎮</button>
+        <p style="margin-top: 1rem; color: #666;">
+            Pas encore de compte ? <a href="/auth/inscription/" style="color: #7030a0;">Inscription</a>
+        </p>
+    </form>
+</div>
+{% endblock %}
