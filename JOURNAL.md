@@ -112,3 +112,26 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 ### Prochaines étapes
 - Déploiement sur Render
 - Sprint review
+
+## Session 2 (suite) — Déploiement Render
+
+### Ce qu'on a fait
+- Installé gunicorn + whitenoise
+- Configuré settings.py pour la production
+- Créé build.sh
+- Créé la base de données PostgreSQL sur Render
+- Créé le Web Service sur Render
+- Déployé le site en production ✅
+
+### Problèmes rencontrés
+- "Cannot GET /" → ALLOWED_HOSTS ne contenait pas la bonne URL Render
+  → Solution : ajouter 'pokemarket-r00f.onrender.com' dans ALLOWED_HOSTS
+- "Not Found" après correction → cache du navigateur
+  → Solution : ouvrir un onglet privé
+
+### État actuel
+- Site en ligne sur https://pokemarket-r00f.onrender.com ✅
+- CI/CD GitHub Actions vert ✅
+- 8 tests, 93% couverture ✅
+
+### Sprint 1 — TERMINÉ ! 🎉
