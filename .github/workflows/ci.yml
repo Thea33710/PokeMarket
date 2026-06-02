@@ -1,0 +1,52 @@
+name: CI — PokéMarket
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: pokemarket_test
+          POSTGRES_USER: pokemarket_user
+          POSTGRES_PASSWORD: pokemarket_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: 📥 Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Installer Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 📦 Installer les dépendances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pytest pytest-django pytest-cov
+
+      - name: 🔍 Vérifier le style du code (flake8)
+        run: flake8 . --exclude=venv,migrations --max-line-length=120
+
+      - name: ✅ Lancer les tests
+        env:
+          SECRET_KEY: test-secret-key-for-ci
+          DEBUG: 'True'
+          DATABASE_URL: postgres://pokemarket_user:pokemarket_pass@localhost:5432/pokemarket_test
+        run: |
+          pytest --cov=accounts --cov=core --cov-report=term-missing

@@ -6,7 +6,6 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.conf import settings
 from .forms import InscriptionForm
 from .models import User
 
@@ -31,9 +30,14 @@ def envoyer_email_confirmation(request, user):
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     lien = f"http://{request.get_host()}/auth/activer/{uid}/{token}/"
+    message = (
+        f"Salut {user.pseudo} !\n\n"
+        f"Clique sur ce lien pour activer ton compte :\n{lien}\n\n"
+        f"À tout de suite sur PokéMarket !"
+    )
     send_mail(
         subject="Active ton compte PokéMarket 🎮",
-        message=f"Salut {user.pseudo} !\n\nClique sur ce lien pour activer ton compte :\n{lien}\n\nÀ tout de suite sur PokéMarket !",
+        message=message,
         from_email="noreply@pokemarket.com",
         recipient_list=[user.email],
     )

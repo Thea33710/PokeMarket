@@ -1,3 +1,1 @@
-from django.db import models
-
-# Create your models here.
+# Pas de modèles dans core pour le MVP
