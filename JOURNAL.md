@@ -89,3 +89,26 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Templates de base HTMX + CSS responsive
 - GitHub Actions CI/CD
 - Déploiement Render
+
+## Session 2 (suite) — GitHub Actions + Tests
+
+### Ce qu'on a fait
+- Créé .github/workflows/ci.yml → pipeline CI/CD
+- Créé pytest.ini
+- Installé pytest, pytest-django, pytest-cov, flake8
+- Écrit 8 tests unitaires Auth (93% couverture)
+- Corrigé les erreurs flake8
+- GitHub Actions passe au vert ✅
+
+### Problèmes rencontrés
+- pytest exit code 5 → aucun test trouvé → solution : créer les tests !
+- permission denied to create database → solution : ALTER USER pokemarket_user CREATEDB
+- Node.js 20 deprecation warning → pas grave, juste un avertissement
+
+### État actuel
+- CI/CD GitHub Actions actif et vert ✅
+- 8 tests passent, couverture 93% ✅
+
+### Prochaines étapes
+- Déploiement sur Render
+- Sprint review
