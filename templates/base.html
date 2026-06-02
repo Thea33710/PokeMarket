@@ -4,62 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PokéMarket{% endblock %}</title>
+
+    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
     <style>
+        /* ── Reset ── */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── Variables couleurs ── */
+        :root {
+            --violet-fonce: #4a1472;
+            --violet-moyen: #7030a0;
+            --lavande: #ede7f6;
+            --blanc: #ffffff;
+            --fond: #fdfbff;
+            --texte: #212121;
+            --gris: #666666;
+            --succes: #4caf50;
+            --erreur: #f44336;
+        }
+
+        /* ── Base ── */
         body {
             font-family: Arial, sans-serif;
-            background: #fdfbff;
-            color: #212121;
+            background: var(--fond);
+            color: var(--texte);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        /* ── Header ── */
         header {
-            background: #4a1472;
+            background: var(--violet-fonce);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
-        header a {
-            color: #ede7f6;
+        .header-logo {
+            color: var(--lavande);
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
+        nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         nav a {
-            color: #ede7f6;
+            color: var(--lavande);
             text-decoration: none;
-            margin-left: 1rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: background 0.2s;
         }
+        nav a:hover { background: var(--violet-moyen); }
+
+        /* ── Menu burger mobile ── */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+        .burger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--lavande);
+            border-radius: 3px;
+        }
+
+        /* ── Main ── */
         main {
-            max-width: 800px;
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
             margin: 2rem auto;
             padding: 0 1rem;
         }
+
+        /* ── Footer ── */
+        footer {
+            background: var(--violet-fonce);
+            color: var(--lavande);
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* ── Messages ── */
         .messages { margin-bottom: 1rem; }
         .message-success {
             background: #e8f5e9;
-            border-left: 4px solid #4caf50;
+            border-left: 4px solid var(--succes);
             padding: 0.8rem 1rem;
             border-radius: 4px;
             margin-bottom: 0.5rem;
         }
         .message-error {
             background: #ffebee;
-            border-left: 4px solid #f44336;
+            border-left: 4px solid var(--erreur);
             padding: 0.8rem 1rem;
             border-radius: 4px;
             margin-bottom: 0.5rem;
         }
+
+        /* ── Cards ── */
         .card {
-            background: white;
+            background: var(--blanc);
             border-radius: 12px;
             padding: 2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1rem;
         }
+
+        /* ── Boutons ── */
         .btn {
-            background: #7030a0;
-            color: white;
+            background: var(--violet-moyen);
+            color: var(--blanc);
             border: none;
             padding: 0.8rem 1.5rem;
             border-radius: 8px;
@@ -67,48 +135,78 @@
             font-size: 1rem;
             text-decoration: none;
             display: inline-block;
+            transition: background 0.2s;
         }
-        .btn:hover { background: #4a1472; }
-        .form-group {
-            margin-bottom: 1rem;
+        .btn:hover { background: var(--violet-fonce); }
+        .btn-secondary {
+            background: var(--lavande);
+            color: var(--violet-fonce);
         }
+        .btn-secondary:hover { background: #d1c4e9; }
+
+        /* ── Formulaires ── */
+        .form-group { margin-bottom: 1rem; }
         .form-group label {
             display: block;
             margin-bottom: 0.3rem;
             font-weight: bold;
-            color: #4a1472;
+            color: var(--violet-fonce);
         }
-        .form-group input {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 0.7rem;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 1rem;
+            font-family: Arial, sans-serif;
         }
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #7030a0;
+            border-color: var(--violet-moyen);
+            box-shadow: 0 0 0 3px rgba(112,48,160,0.1);
         }
         .error-text {
-            color: #f44336;
+            color: var(--erreur);
             font-size: 0.85rem;
             margin-top: 0.3rem;
+        }
+
+        /* ── Responsive mobile ── */
+        @media (max-width: 600px) {
+            header { padding: 1rem; }
+            .header-logo { font-size: 1.1rem; }
+            nav { display: none; flex-direction: column; width: 100%; }
+            nav.open { display: flex; }
+            nav a { padding: 0.6rem 1rem; }
+            .burger { display: flex; }
+            main { margin: 1rem auto; }
+            .card { padding: 1.2rem; }
+            .btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="/">🎮 PokéMarket</a>
-        <nav>
+        <a href="/" class="header-logo">🎮 PokéMarket</a>
+
+        <!-- Menu burger pour mobile -->
+        <button class="burger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav">
             {% if user.is_authenticated %}
-                <a href="/">Tableau de bord</a>
-                <a href="/auth/deconnexion/">Déconnexion</a>
+                <a href="/">🏠 Accueil</a>
+                <a href="/auth/deconnexion/">🚪 Déconnexion</a>
             {% else %}
-                <a href="/auth/connexion/">Connexion</a>
-                <a href="/auth/inscription/">Inscription</a>
+                <a href="/auth/connexion/">🔐 Connexion</a>
+                <a href="/auth/inscription/">✨ Inscription</a>
             {% endif %}
         </nav>
     </header>
+
     <main>
         {% if messages %}
             <div class="messages">
@@ -117,7 +215,22 @@
                 {% endfor %}
             </div>
         {% endif %}
+
         {% block content %}{% endblock %}
     </main>
+
+    <footer>
+        <p>🎮 PokéMarket — Fan site non officiel, non affilié à Nintendo / The Pokémon Company</p>
+    </footer>
+
+    <script>
+        // Menu burger mobile
+        function toggleMenu() {
+            const nav = document.getElementById('main-nav');
+            nav.classList.toggle('open');
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
