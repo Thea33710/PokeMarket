@@ -189,3 +189,22 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 
 ### Prochaines étapes (Sprint 2 suite)
 - Vues et templates Pokédex (liste, création, marquage)
+
+## Session 3 (suite) — Intégration PokéAPI + cache local
+
+### Ce qu'on a fait
+- Créé le modèle `PokemonCache` (pokemon_id, nom_fr, sprite_url, types)
+- Appliqué la migration ✅
+- Créé la commande `cache_pokeapi`
+- Rempli le cache : 400 Pokémon, 0 erreurs ✅
+- Mis à jour les GitHub Actions vers Node.js 24 (checkout@v5, setup-python@v6)
+- Corrigé les erreurs flake8 (imports inutilisés, variables non utilisées)
+- CI verte ✅
+
+### Problèmes rencontrés
+- GitHub Actions rouge → erreurs flake8 dans seed_sv.py, views.py, tests.py
+  → Solution : nettoyer les imports et variables inutilisés
+
+### État actuel
+- Cache PokéAPI complet : 400 Pokémon avec noms FR, sprites, types ✅
+- CI GitHub Actions verte ✅
