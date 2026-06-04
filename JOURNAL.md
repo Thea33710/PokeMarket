@@ -166,3 +166,26 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Mettre à jour DATABASE_URL dans les variables Render
 - Relancer migrate → tout repart !
 - Date limite approximative : fin août 2026
+
+## Session 3 — Sprint 2 — Modèles Jeu + Pokédex + seed S/V
+
+### Ce qu'on a fait
+- Créé l'app Django `pokedex`
+- Écrit les modèles `Jeu` et `Pokédex` avec leurs champs complets
+- Appliqué les migrations ✅
+- Enregistré les modèles dans l'admin Django
+- Créé la commande de seed `seed_sv`
+- Installé `requests`
+- Seedé les données Scarlet & Violet depuis PokéAPI : 400 Pokémon du Pokédex Paldea ✅
+- Commité et pushé sur `dev`
+
+### Problèmes rencontrés
+- `ModuleNotFoundError: No module named 'requests'` → solution : pip install requests
+
+### État actuel
+- Branche active : dev
+- Modèles Jeu + Pokédex en base ✅
+- 400 Pokémon Paldea seedés ✅
+
+### Prochaines étapes (Sprint 2 suite)
+- Vues et templates Pokédex (liste, création, marquage)
