@@ -225,3 +225,22 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Vue liste Pokédex ✅
 - Vue création Pokédex ✅
 - Vue détail avec 400 Pokémon, noms FR, sprites, types ✅
+
+## Session 3 (suite) — Marquage HTMX
+
+### Ce qu'on a fait
+- Créé la vue `marquer_pokemon` avec 3 actions : vu, capture, shiny
+- Créé le fragment `pokemon_card.html` avec icônes 👁️ 🔴 ✨
+- Ajouté le CSS pour les statuts et icônes (actif/grisé)
+- Marquage fonctionne sans rechargement de page grâce à HTMX ✅
+- Règle : capturé → décocher repasse à vu (pas non_vu)
+- Shiny uniquement visible si mode_shiny activé sur le Pokédex
+
+### Problèmes rencontrés
+- Swap HTMX ne se voyait pas → CSS manquant pour statut-vu/non_vu/capture
+- Cycle non_vu→vu→capture ne correspondait pas au besoin → remplacé par boutons indépendants
+- Import HttpResponse inutilisé → erreur flake8 → supprimé
+
+### État actuel
+- Marquage HTMX complet et fonctionnel ✅
+- CI verte ✅
