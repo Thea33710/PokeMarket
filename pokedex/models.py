@@ -39,3 +39,14 @@ class Pokedex(models.Model):
 
     def __str__(self):
         return f"{self.nom} ({self.jeu.nom})"
+
+
+class PokemonCache(models.Model):
+    pokemon_id = models.IntegerField(unique=True)
+    nom_fr = models.CharField(max_length=100)
+    sprite_url = models.URLField(max_length=300)
+    types = models.JSONField(default=list)  # ex: ['feu', 'vol']
+    date_mise_a_jour = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"#{self.pokemon_id} {self.nom_fr}"
