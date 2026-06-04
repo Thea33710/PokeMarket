@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pokedex.nom }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{{ pokedex.nom }}</h1>
+        <span class="jeu-badge">{{ pokedex.jeu.nom }}</span>
+    </div>
+
+    <!-- Barre de progression -->
+    <div class="progression-bar-container">
+        <div class="progression-label">
+            {{ captures }} / {{ total }} capturés
+        </div>
+        <div class="progression-bar">
+            <div class="progression-fill"
+                 style="width: {% if total > 0 %}{% widthratio captures total 100 %}{% else %}0{% endif %}%">
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste Pokémon -->
+    <div class="pokemon-grid">
+        {% for entree in entrees %}
+        <div class="pokemon-card statut-{{ entree.statut }}">
+            <img src="{{ entree.sprite }}" alt="{{ entree.nom }}" loading="lazy">
+            <div class="pokemon-info">
+                <span class="pokemon-numero">#{{ entree.id }}</span>
+                <span class="pokemon-nom">{{ entree.nom }}</span>
+                <div class="pokemon-types">
+                    {% for type in entree.types %}
+                        <span class="type-badge type-{{ type }}">{{ type }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="pokemon-statut">
+                {{ entree.statut }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

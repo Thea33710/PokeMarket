@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Pokédex{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Mes Pokédex</h1>
+        <a href="{% url 'pokedex:creer' %}" class="btn btn-primary">+ Nouveau Pokédex</a>
+    </div>
+
+    {% if pokedex_list %}
+        <div class="pokedex-grid">
+            {% for pokedex in pokedex_list %}
+            <a href="{% url 'pokedex:detail' pokedex.pk %}" class="pokedex-card">
+                <div class="pokedex-card-header">
+                    <h2>{{ pokedex.nom }}</h2>
+                    <span class="jeu-badge">{{ pokedex.jeu.nom }}</span>
+                </div>
+                <div class="pokedex-card-body">
+                    <div class="progression">
+                        {% with captures=pokedex.pokemon_statuses.values|dictsort:0 %}
+                        <span>{{ pokedex.jeu.nom }}</span>
+                        {% endwith %}
+                    </div>
+                    {% if pokedex.mode_shiny %}
+                        <span class="shiny-badge">✨ Shiny</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Tu n'as pas encore de Pokédex.</p>
+            <a href="{% url 'pokedex:creer' %}" class="btn btn-primary">Créer mon premier Pokédex</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

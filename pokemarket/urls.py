@@ -5,4 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
     path('', include('core.urls')),
+    path('pokedex/', include('pokedex.urls')),
 ]

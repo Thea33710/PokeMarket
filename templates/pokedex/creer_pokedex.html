@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Nouveau Pokédex{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Créer un Pokédex</h1>
+
+    <form method="post" class="form-card">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="error">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Créer</button>
+        <a href="{% url 'pokedex:liste' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}
