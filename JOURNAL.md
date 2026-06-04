@@ -244,3 +244,20 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 ### État actuel
 - Marquage HTMX complet et fonctionnel ✅
 - CI verte ✅
+
+## Session 3 (suite) — Barre de progression + mode shiny
+
+### Ce qu'on a fait
+- Ajouté CSS pour la barre de progression (dégradé violet)
+- Ajouté compteur shiny sous la barre si mode_shiny activé
+- Mise à jour en temps réel via HTMX hx-swap-oob ✅
+- Créé fragment `marquer_response.html` pour combiner carte + barre
+
+### Problèmes rencontrés
+- hx-swap-oob dans le fragment carte → barre dupliquée dans chaque carte
+  → Solution : template séparé `marquer_response.html` retourné par la vue
+
+### État actuel
+- Barre de progression mise à jour sans rechargement ✅
+- Compteur shiny fonctionnel ✅
+- CI verte ✅
