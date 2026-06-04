@@ -277,3 +277,38 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 ### État actuel
 - Filtres fonctionnels ✅
 - CI verte ✅
+
+## Session 3 (suite) — Tests unitaires Pokédex + Sprint Review
+
+### Ce qu'on a fait
+- Écrit 11 tests unitaires : modèles, cache, vues marquage
+- Corrigé : CREATEDB manquant, username requis, force_login pour auth email
+- 11/11 tests passent ✅
+- CI verte ✅
+
+### Problèmes rencontrés
+- CREATEDB manquant → ALTER USER pokemarket_user CREATEDB
+- create_user nécessite username (AbstractUser) → ajouté
+- client.login() ne fonctionne pas avec auth email → remplacé par force_login
+
+### Sprint 2 — TERMINÉ 🎉
+
+## Sprint Review — Sprint 2
+
+### Ce qui a bien marché
+- Modèles Jeu + Pokédex + PokemonCache ✅
+- Seed 400 Pokémon Paldea depuis PokéAPI ✅
+- Cache local noms FR, sprites, types ✅
+- Marquage HTMX sans rechargement ✅
+- Barre de progression temps réel ✅
+- Filtres type, statut, recherche ✅
+- 11 tests, CI verte ✅
+
+### Ce qui a pris du temps
+- hx-swap-oob mal placé → barre dupliquée dans chaque carte
+- force_login vs client.login avec auth email
+
+### Métriques Sprint 2
+- Cartes complétées : 6/6 ✅
+- Tests Pokédex : 11 tests ✅
+- CI verte ✅
