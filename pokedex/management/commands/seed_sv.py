@@ -1,10 +1,6 @@
 import requests
-import time
 from django.core.management.base import BaseCommand
 from pokedex.models import Jeu
-
-
-POKEDEX_REGIONAL_SV = list(range(906, 1026))  # #906 à #1025
 
 
 def get_nom_francais(noms):
@@ -20,14 +16,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write('🌱 Démarrage du seed Scarlet & Violet...')
 
-        # Créer ou récupérer le jeu
         jeu, created = Jeu.objects.get_or_create(
             nom='Pokémon Écarlate & Violet',
             defaults={
                 'generation': 9,
                 'plateforme': 'Switch',
                 'echanges_online': True,
-                'pokedex_regional': POKEDEX_REGIONAL_SV,
+                'pokedex_regional': [],
                 'exclusivites': {
                     'ecarlate': [],
                     'violet': [],
@@ -40,45 +35,23 @@ class Command(BaseCommand):
         else:
             self.stdout.write('ℹ️  Jeu déjà existant, on continue...')
 
-        # Récupérer les exclusivités depuis PokéAPI
-        self.stdout.write('🔍 Récupération des exclusivités de version...')
-        ecarlate = []
-        violet = []
+        self.stdout.write('🔍 Récupération du Pokédex Paldea...')
 
         try:
-            r = requests.get('https://pokeapi.co/api/v2/version-group/scarlet-violet/')
+            r = requests.get('https://pokeapi.co/api/v2/pokedex/paldea/', timeout=10)
             r.raise_for_status()
             data = r.json()
-            self.stdout.write(self.style.SUCCESS('✅ Connexion PokéAPI OK'))
+            self.stdout.write(self.style.SUCCESS(
+                f'✅ Pokédex Paldea récupéré ({len(data["pokemon_entries"])} Pokémon)'
+            ))
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f'❌ Erreur PokéAPI : {e}'))
+            self.stdout.write(self.style.ERROR(f'❌ Erreur Pokédex : {e}'))
             return
 
-        # Récupérer les exclusivités Écarlate
-        try:
-            r = requests.get('https://pokeapi.co/api/v2/version/scarlet/')
-            data = r.json()
-            for entry in data.get('version_group', {}).get('pokemon_entries', []):
-                pass  # structure différente, on passe par le Pokédex
-        except Exception:
-            pass
-
-        # Récupérer via le Pokédex de version
-        for version_id, liste in [('paldea', POKEDEX_REGIONAL_SV)]:
-            try:
-                r = requests.get(f'https://pokeapi.co/api/v2/pokedex/paldea/')
-                r.raise_for_status()
-                data = r.json()
-                self.stdout.write(self.style.SUCCESS(f'✅ Pokédex Paldea récupéré ({len(data["pokemon_entries"])} Pokémon)'))
-                break
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f'❌ Erreur Pokédex : {e}'))
-                return
-
-        # Mettre à jour le jeu avec le vrai Pokédex régional
-        ids_regionaux = [entry['pokemon_species']['url'].split('/')[-2]
-                         for entry in data['pokemon_entries']]
-        ids_regionaux = [int(i) for i in ids_regionaux]
+        ids_regionaux = [
+            int(entry['pokemon_species']['url'].split('/')[-2])
+            for entry in data['pokemon_entries']
+        ]
 
         jeu.pokedex_regional = ids_regionaux
         jeu.save()
