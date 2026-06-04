@@ -1,0 +1,45 @@
+<div class="pokemon-card statut-{{ entree.statut }}" id="pokemon-{{ entree.id }}">
+    <img src="{{ entree.sprite }}" alt="{{ entree.nom }}" loading="lazy">
+    <div class="pokemon-info">
+        <span class="pokemon-numero">#{{ entree.id }}</span>
+        <span class="pokemon-nom">{{ entree.nom }}</span>
+        <div class="pokemon-types">
+            {% for type in entree.types %}
+                <span class="type-badge type-{{ type }}">{{ type }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="pokemon-icones">
+        <!-- Œil : Vu -->
+        <button class="icone-btn {% if entree.statut == 'vu' or entree.statut == 'capture' %}actif{% else %}grise{% endif %}"
+                hx-post="{% url 'pokedex:marquer' pokedex.pk entree.id 'vu' %}"
+                hx-target="#pokemon-{{ entree.id }}"
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                title="Vu">
+            👁️
+        </button>
+
+        <!-- Pokéball : Capturé -->
+        <button class="icone-btn {% if entree.statut == 'capture' %}actif{% else %}grise{% endif %}"
+                hx-post="{% url 'pokedex:marquer' pokedex.pk entree.id 'capture' %}"
+                hx-target="#pokemon-{{ entree.id }}"
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                title="Capturé">
+            🔴
+        </button>
+
+        {% if pokedex.mode_shiny %}
+        <!-- Shiny -->
+        <button class="icone-btn {% if entree.shiny %}actif{% else %}grise{% endif %}"
+                hx-post="{% url 'pokedex:marquer' pokedex.pk entree.id 'shiny' %}"
+                hx-target="#pokemon-{{ entree.id }}"
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                title="Shiny">
+            ✨
+        </button>
+        {% endif %}
+    </div>
+</div>

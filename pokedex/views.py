@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 from .models import Pokedex, PokemonCache
 from .forms import PokedexForm
 
@@ -54,4 +56,50 @@ def detail_pokedex(request, pk):
         'entrees': entrees,
         'captures': captures,
         'total': total,
+    })
+
+
+@login_required
+@require_POST
+def marquer_pokemon(request, pk, pokemon_id, action):
+    pokedex = get_object_or_404(Pokedex, pk=pk, user=request.user)
+
+    statut_actuel = pokedex.pokemon_statuses.get(str(pokemon_id), 'non_vu')
+    nouveau_statut = statut_actuel  # par défaut on ne change pas
+
+    if action == 'vu':
+        if statut_actuel in ('non_vu', 'capture'):
+            nouveau_statut = 'vu'
+        else:
+            nouveau_statut = 'non_vu'
+
+    elif action == 'capture':
+        if statut_actuel == 'capture':
+            nouveau_statut = 'vu'
+        else:
+            nouveau_statut = 'capture'
+
+    elif action == 'shiny' and pokedex.mode_shiny:
+        if pokedex.shiny_statuses is None:
+            pokedex.shiny_statuses = {}
+        shiny_actuel = pokedex.shiny_statuses.get(str(pokemon_id), False)
+        pokedex.shiny_statuses[str(pokemon_id)] = not shiny_actuel
+
+    pokedex.pokemon_statuses[str(pokemon_id)] = nouveau_statut
+    pokedex.save()
+
+    cache = PokemonCache.objects.get(pokemon_id=pokemon_id)
+    shiny = (pokedex.mode_shiny and pokedex.shiny_statuses
+             and pokedex.shiny_statuses.get(str(pokemon_id), False))
+
+    return render(request, 'pokedex/fragments/pokemon_card.html', {
+        'entree': {
+            'id': pokemon_id,
+            'nom': cache.nom_fr,
+            'sprite': cache.sprite_url,
+            'types': cache.types,
+            'statut': nouveau_statut,
+            'shiny': shiny,
+        },
+        'pokedex': pokedex,
     })
