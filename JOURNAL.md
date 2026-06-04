@@ -261,3 +261,19 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Barre de progression mise à jour sans rechargement ✅
 - Compteur shiny fonctionnel ✅
 - CI verte ✅
+
+## Session 3 (suite) — Filtres Pokédex + recherche
+
+### Ce qu'on a fait
+- Ajouté barre de filtres : recherche par nom/numéro, filtre type, filtre statut, filtre shiny
+- Filtres en JavaScript pur (pas de rechargement de page)
+- Compteur de résultats affichés
+- Statut simplifié : capturé / non capturé (pas besoin de vu/non vu)
+- Types disponibles calculés dynamiquement depuis le cache
+
+### Problèmes rencontrés
+- Aucun !
+
+### État actuel
+- Filtres fonctionnels ✅
+- CI verte ✅
