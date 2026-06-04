@@ -1,0 +1,15 @@
+{% include "pokedex/fragments/pokemon_card.html" %}
+
+<div id="progression-oob" hx-swap-oob="true">
+    <div class="progression-label">
+        {{ captures }} / {{ total }} capturés
+    </div>
+    <div class="progression-bar">
+        <div class="progression-fill"
+             style="width: {% if total > 0 %}{% widthratio captures total 100 %}{% else %}0{% endif %}%">
+        </div>
+    </div>
+    {% if pokedex.mode_shiny %}
+        <div class="shiny-compteur">✨ {{ shinies }} shiny capturés</div>
+    {% endif %}
+</div>

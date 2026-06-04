@@ -48,6 +48,9 @@ def detail_pokedex(request, pk):
             })
 
     captures = sum(1 for e in entrees if e['statut'] == 'capture')
+    shinies = 0
+    if pokedex.mode_shiny and pokedex.shiny_statuses:
+        shinies = sum(1 for pid in pokedex.shiny_statuses if pokedex.shiny_statuses[str(pid)])
     total = len(entrees)
 
     return render(request, 'pokedex/detail_pokedex.html', {
@@ -55,6 +58,7 @@ def detail_pokedex(request, pk):
         'entrees': entrees,
         'captures': captures,
         'total': total,
+        'shinies': shinies,
     })
 
 
@@ -91,7 +95,14 @@ def marquer_pokemon(request, pk, pokemon_id, action):
     shiny = (pokedex.mode_shiny and pokedex.shiny_statuses
              and pokedex.shiny_statuses.get(str(pokemon_id), False))
 
-    return render(request, 'pokedex/fragments/pokemon_card.html', {
+    # Recalculer progression
+    captures = sum(1 for s in pokedex.pokemon_statuses.values() if s == 'capture')
+    total = len(pokedex.jeu.pokedex_regional)
+    shinies = 0
+    if pokedex.mode_shiny and pokedex.shiny_statuses:
+        shinies = sum(1 for v in pokedex.shiny_statuses.values() if v)
+
+    return render(request, 'pokedex/fragments/marquer_response.html', {
         'entree': {
             'id': pokemon_id,
             'nom': cache.nom_fr,
@@ -101,4 +112,7 @@ def marquer_pokemon(request, pk, pokemon_id, action):
             'shiny': shiny,
         },
         'pokedex': pokedex,
+        'captures': captures,
+        'total': total,
+        'shinies': shinies,
     })

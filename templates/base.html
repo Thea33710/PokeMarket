@@ -253,6 +253,38 @@
         .icone-btn.grise { filter: grayscale(100%) opacity(30%); }
         .icone-btn.actif { filter: none; }
         .icone-btn:hover { transform: scale(1.2); }
+
+        /* ── Barre de progression ── */
+        .progression-bar-container {
+            margin: 1rem 0 1.5rem 0;
+        }
+
+        .progression-label {
+            font-size: 0.95rem;
+            color: var(--gris);
+            margin-bottom: 0.4rem;
+        }
+
+        .progression-bar {
+            background: var(--lavande);
+            border-radius: 20px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .progression-fill {
+            background: linear-gradient(90deg, var(--violet-moyen), var(--violet-fonce));
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s ease;
+            min-width: 2px;
+        }
+
+        .shiny-compteur {
+            font-size: 0.85rem;
+            color: var(--violet-moyen);
+            margin-top: 0.3rem;
+        }
     </style>
 </head>
 <body>

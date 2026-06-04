@@ -10,15 +10,18 @@
     </div>
 
     <!-- Barre de progression -->
-    <div class="progression-bar-container">
+    <div class="progression-bar-container" id="progression-oob">
         <div class="progression-label">
             {{ captures }} / {{ total }} capturés
         </div>
         <div class="progression-bar">
             <div class="progression-fill"
-                 style="width: {% if total > 0 %}{% widthratio captures total 100 %}{% else %}0{% endif %}%">
+                style="width: {% if total > 0 %}{% widthratio captures total 100 %}{% else %}0{% endif %}%">
             </div>
         </div>
+        {% if pokedex.mode_shiny %}
+            <div class="shiny-compteur">✨ {{ shinies }} shiny capturés</div>
+        {% endif %}
     </div>
 
     <!-- Liste Pokémon -->
