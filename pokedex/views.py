@@ -53,12 +53,20 @@ def detail_pokedex(request, pk):
         shinies = sum(1 for pid in pokedex.shiny_statuses if pokedex.shiny_statuses[str(pid)])
     total = len(entrees)
 
+    # Types disponibles pour le filtre
+    types_set = set()
+    for entree in entrees:
+        for t in entree['types']:
+            types_set.add(t)
+    types_disponibles = sorted(types_set)
+
     return render(request, 'pokedex/detail_pokedex.html', {
         'pokedex': pokedex,
         'entrees': entrees,
         'captures': captures,
         'total': total,
         'shinies': shinies,
+        'types_disponibles': types_disponibles,
     })
 
 

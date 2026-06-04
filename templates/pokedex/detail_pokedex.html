@@ -24,11 +24,91 @@
         {% endif %}
     </div>
 
+    <!-- Filtres -->
+    <div class="filtres-bar">
+        <input type="text" id="recherche" placeholder="🔍 Rechercher par nom ou numéro..."
+               class="filtre-recherche"
+               oninput="filtrerPokemon()">
+
+        <select id="filtre-type" class="filtre-select" onchange="filtrerPokemon()">
+            <option value="">Tous les types</option>
+            {% for type in types_disponibles %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="filtre-statut" class="filtre-select" onchange="filtrerPokemon()">
+            <option value="">Tous</option>
+            <option value="capture">Capturés</option>
+            <option value="non_capture">Non capturés</option>
+        </select>
+
+        {% if pokedex.mode_shiny %}
+        <select id="filtre-shiny" class="filtre-select" onchange="filtrerPokemon()">
+            <option value="">Shiny — tous</option>
+            <option value="shiny">Shiny capturés</option>
+            <option value="non_shiny">Non shiny</option>
+        </select>
+        {% endif %}
+
+        <button class="btn btn-secondary" onclick="reinitialiserFiltres()">Réinitialiser</button>
+    </div>
+
+    <!-- Compteur résultats -->
+    <div id="compteur-resultats" class="compteur-resultats"></div>
+
     <!-- Liste Pokémon -->
-    <div class="pokemon-grid">
+    <div class="pokemon-grid" id="pokemon-grid">
         {% for entree in entrees %}
             {% include "pokedex/fragments/pokemon_card.html" with pokedex=pokedex entree=entree %}
         {% endfor %}
     </div>
 </div>
+
+{% block extra_js %}
+<script>
+function filtrerPokemon() {
+    const recherche = document.getElementById('recherche').value.toLowerCase();
+    const type = document.getElementById('filtre-type').value.toLowerCase();
+    const statut = document.getElementById('filtre-statut').value;
+    const shinySelect = document.getElementById('filtre-shiny');
+    const shiny = shinySelect ? shinySelect.value : '';
+
+    const cartes = document.querySelectorAll('.pokemon-card');
+    let visibles = 0;
+
+    cartes.forEach(carte => {
+        const nom = carte.querySelector('.pokemon-nom').textContent.toLowerCase();
+        const numero = carte.querySelector('.pokemon-numero').textContent.toLowerCase();
+        const types = Array.from(carte.querySelectorAll('.type-badge')).map(t => t.textContent.toLowerCase());
+        const statutCarte = carte.className.includes('statut-capture') ? 'capture' : 'non_capture';
+        const estShiny = carte.querySelector('.icone-btn.actif[title="Shiny"]') !== null;
+
+        let afficher = true;
+
+        if (recherche && !nom.includes(recherche) && !numero.includes(recherche)) afficher = false;
+        if (type && !types.includes(type)) afficher = false;
+        if (statut && statutCarte !== statut) afficher = false;
+        if (shiny === 'shiny' && !estShiny) afficher = false;
+        if (shiny === 'non_shiny' && estShiny) afficher = false;
+
+        carte.style.display = afficher ? '' : 'none';
+        if (afficher) visibles++;
+    });
+
+    document.getElementById('compteur-resultats').textContent =
+        visibles < cartes.length ? `${visibles} Pokémon affichés` : '';
+}
+
+function reinitialiserFiltres() {
+    document.getElementById('recherche').value = '';
+    document.getElementById('filtre-type').value = '';
+    document.getElementById('filtre-statut').value = '';
+    const shinySelect = document.getElementById('filtre-shiny');
+    if (shinySelect) shinySelect.value = '';
+    filtrerPokemon();
+}
+</script>
+{% endblock %}
+
 {% endblock %}
