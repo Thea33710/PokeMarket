@@ -208,3 +208,20 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 ### État actuel
 - Cache PokéAPI complet : 400 Pokémon avec noms FR, sprites, types ✅
 - CI GitHub Actions verte ✅
+
+## Session 3 (suite) — Vue liste + création Pokédex
+
+### Ce qu'on a fait
+- Créé les vues `liste_pokedex`, `creer_pokedex`, `detail_pokedex`
+- Créé `pokedex/forms.py` avec `PokedexForm`
+- Créé `pokedex/urls.py` et branché dans `pokemarket/urls.py`
+- Créé les templates : `liste_pokedex.html`, `creer_pokedex.html`, `detail_pokedex.html`
+- Testé en local : liste, création, affichage des 400 Pokémon avec sprites FR ✅
+
+### Problèmes rencontrés
+- Import `Jeu` inutilisé dans views.py → erreur flake8 → supprimé
+
+### État actuel
+- Vue liste Pokédex ✅
+- Vue création Pokédex ✅
+- Vue détail avec 400 Pokémon, noms FR, sprites, types ✅
