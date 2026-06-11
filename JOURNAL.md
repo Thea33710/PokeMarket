@@ -363,3 +363,33 @@ Aucun !
 
 ### Prochaines étapes
 - Liste + détail annonces + filtres marketplace (US-10)
+
+## Session 4 (suite) — Sprint 3 — Améliorations formulaire annonce
+
+### Ce qu'on a fait
+- Ajouté talents dans PokemonCache (JSONField) + migration
+- Mis à jour cache_pokeapi pour récupérer les noms FR des talents
+- Relancé le cache : 400 Pokémon avec talents en français ✅
+- Talents dynamiques : chargement automatique via HTMX selon le Pokémon sélectionné
+- Genre changé en cases à cocher (MultipleChoiceField) — optionnel pour cherché, optionnel pour proposé
+- cherche_genre changé en JSONField dans le modèle Annonce + migration
+- Ajouté cherche_talents (JSONField) dans le modèle Annonce + migration
+- Affichage talents et nature du proposé dans la liste des annonces
+- Corrigé erreurs flake8
+- CI verte ✅
+
+### Problèmes rencontrés
+- cherche_genre sauvegardé comme string au lieu de liste → changé en JSONField
+- Migration impossible car vieilles données invalides → vidé les annonces puis migré
+- flake8 : espaces sur lignes vides, trop de lignes vides
+
+### Idées notées dans IDEES.md
+- Jeux possédés sur le profil utilisateur (ManyToManyField)
+
+### État actuel
+- Formulaire création annonce complet ✅
+- Liste annonces avec tous les détails ✅
+- CI verte ✅
+
+### Prochaines étapes
+- Liste + détail annonces + filtres marketplace (US-10)
