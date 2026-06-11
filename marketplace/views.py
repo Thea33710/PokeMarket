@@ -38,7 +38,7 @@ def creer_annonce(request):
             # Shiny proposé
             shiny_propose = True if form.cleaned_data['propose_shiny'] else None
 
-            annonce = Annonce.objects.create(
+            Annonce.objects.create(
                 user=request.user,
                 jeu=jeu_sv,
                 pokemon_cherche_id=form.cleaned_data['pokemon_cherche_id'],
@@ -87,6 +87,7 @@ def liste_annonces(request):
         'annonces': annonces,
         'cache': cache,
     })
+
 
 def autocomplete_pokemon(request):
     query = request.GET.get('q', '').strip()

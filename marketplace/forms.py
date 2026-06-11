@@ -46,8 +46,8 @@ class AnnonceForm(forms.Form):
 
     # Obligatoires
     cherche_shiny = forms.BooleanField(
-    label='✨ Shiny uniquement',
-    required=False,
+        label='✨ Shiny uniquement',
+        required=False,
     )
     cherche_genre = forms.ChoiceField(
         label='Genre',
@@ -111,8 +111,8 @@ class AnnonceForm(forms.Form):
 
     # Mêmes champs pour le proposé
     propose_shiny = forms.BooleanField(
-    label='✨ Mon Pokémon est shiny',
-    required=False,
+        label='✨ Mon Pokémon est shiny',
+        required=False,
     )
     propose_genre = forms.ChoiceField(
         label='Genre',
