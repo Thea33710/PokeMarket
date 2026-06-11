@@ -23,8 +23,35 @@ def get_types_francais(types):
     return [TYPES_FR.get(t['type']['name'], t['type']['name']) for t in types]
 
 
+def get_nom_talent_francais(ability_name):
+    try:
+        r = requests.get(
+            f'https://pokeapi.co/api/v2/ability/{ability_name}/',
+            timeout=10
+        )
+        r.raise_for_status()
+        data = r.json()
+        for entry in data['names']:
+            if entry['language']['name'] == 'fr':
+                return entry['name']
+        return ability_name
+    except Exception:
+        return ability_name
+
+
+def get_talents(abilities):
+    resultats = []
+    for entry in abilities:
+        nom_fr = get_nom_talent_francais(entry['ability']['name'])
+        resultats.append({
+            'nom': nom_fr,
+            'cache': entry['is_hidden'],
+        })
+    return resultats
+
+
 class Command(BaseCommand):
-    help = 'Remplit le cache PokéAPI (noms FR, sprites, types) pour S/V'
+    help = 'Remplit le cache PokéAPI (noms FR, sprites, types, talents) pour S/V'
 
     def handle(self, *args, **kwargs):
         try:
@@ -41,13 +68,8 @@ class Command(BaseCommand):
         erreurs = 0
 
         for i, pokemon_id in enumerate(ids, 1):
-            # Déjà en cache ?
-            if PokemonCache.objects.filter(pokemon_id=pokemon_id).exists():
-                ok += 1
-                continue
-
             try:
-                # Récupérer le nom FR
+                # Récupérer nom FR
                 r_species = requests.get(
                     f'https://pokeapi.co/api/v2/pokemon-species/{pokemon_id}/',
                     timeout=10
@@ -55,11 +77,10 @@ class Command(BaseCommand):
                 r_species.raise_for_status()
                 species_data = r_species.json()
                 nom_fr = get_nom_francais(species_data['names'])
-
                 if not nom_fr:
                     nom_fr = species_data['name']
 
-                # Récupérer sprite + types
+                # Récupérer sprite + types + talents
                 r_pokemon = requests.get(
                     f'https://pokeapi.co/api/v2/pokemon/{pokemon_id}/',
                     timeout=10
@@ -67,22 +88,22 @@ class Command(BaseCommand):
                 r_pokemon.raise_for_status()
                 pokemon_data = r_pokemon.json()
 
-                sprite_url = (
-                    pokemon_data['sprites']['front_default'] or ''
-                )
+                sprite_url = pokemon_data['sprites']['front_default'] or ''
                 types = get_types_francais(pokemon_data['types'])
+                talents = get_talents(pokemon_data['abilities'])
 
-                PokemonCache.objects.create(
+                PokemonCache.objects.update_or_create(
                     pokemon_id=pokemon_id,
-                    nom_fr=nom_fr,
-                    sprite_url=sprite_url,
-                    types=types,
+                    defaults={
+                        'nom_fr': nom_fr,
+                        'sprite_url': sprite_url,
+                        'types': types,
+                        'talents': talents,
+                    }
                 )
 
                 ok += 1
                 self.stdout.write(f'  [{i}/{total}] #{pokemon_id} {nom_fr} ✅')
-
-                # Pause pour ne pas surcharger PokéAPI
                 time.sleep(0.3)
 
             except Exception as e:

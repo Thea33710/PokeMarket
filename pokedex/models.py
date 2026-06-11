@@ -46,6 +46,7 @@ class PokemonCache(models.Model):
     nom_fr = models.CharField(max_length=100)
     sprite_url = models.URLField(max_length=300)
     types = models.JSONField(default=list)  # ex: ['feu', 'vol']
+    talents = models.JSONField(default=list)  # ex: [{'nom': 'Torrent', 'cache': False}]
     date_mise_a_jour = models.DateTimeField(auto_now=True)
 
     def __str__(self):
