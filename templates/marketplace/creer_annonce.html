@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Créer une annonce — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>📢 Créer une annonce</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.pokemon_cherche_id }}
+        {{ form.pokemon_propose_id }}
+
+        <h2>🔍 Pokémon recherché</h2>
+
+        <div class="form-group autocomplete-wrapper">
+            <label for="cherche-search">Nom du Pokémon recherché</label>
+            <input type="text"
+                   id="cherche-search"
+                   name="q"
+                   placeholder="Tape un nom... ex: Bulbi"
+                   autocomplete="off"
+                   hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#cherche-resultats">
+            <div id="cherche-resultats" class="autocomplete-resultats"></div>
+        </div>
+
+        <div id="cherche-choix" class="pokemon-choisi" style="display:none">
+            ✅ Pokémon sélectionné : <strong id="cherche-nom-affiche"></strong>
+            <button type="button" onclick="effacerChoix('cherche')">✏️</button>
+        </div>
+
+        <h3>Obligatoires</h3>
+        <div class="form-group">
+            {{ form.cherche_shiny.label_tag }}
+            {{ form.cherche_shiny }}
+        </div>
+        <div class="form-group">
+            {{ form.cherche_genre.label_tag }}
+            {{ form.cherche_genre }}
+        </div>
+
+        <h3>Optionnels</h3>
+        <div class="form-group">
+            {{ form.cherche_nature.label_tag }}
+            {{ form.cherche_nature }}
+        </div>
+        <div class="form-group">
+            {{ form.cherche_talent.label_tag }}
+            {{ form.cherche_talent }}
+        </div>
+        <div class="form-group">
+            {{ form.cherche_commentaire.label_tag }}
+            {{ form.cherche_commentaire }}
+        </div>
+
+        <h3>IVs minimum souhaités (optionnel)</h3>
+        <div class="ivs-grid">
+            <div class="form-group">{{ form.iv_pv.label_tag }}{{ form.iv_pv }}</div>
+            <div class="form-group">{{ form.iv_atk.label_tag }}{{ form.iv_atk }}</div>
+            <div class="form-group">{{ form.iv_def.label_tag }}{{ form.iv_def }}</div>
+            <div class="form-group">{{ form.iv_spa.label_tag }}{{ form.iv_spa }}</div>
+            <div class="form-group">{{ form.iv_spd.label_tag }}{{ form.iv_spd }}</div>
+            <div class="form-group">{{ form.iv_spe.label_tag }}{{ form.iv_spe }}</div>
+        </div>
+
+        <h2>🎁 Pokémon proposé</h2>
+
+        <div class="form-group autocomplete-wrapper">
+            <label for="propose-search">Nom du Pokémon proposé</label>
+            <input type="text"
+                   id="propose-search"
+                   name="q"
+                   placeholder="Tape un nom... ex: Salame"
+                   autocomplete="off"
+                   hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#propose-resultats">
+            <div id="propose-resultats" class="autocomplete-resultats"></div>
+        </div>
+
+        <div id="propose-choix" class="pokemon-choisi" style="display:none">
+            ✅ Pokémon sélectionné : <strong id="propose-nom-affiche"></strong>
+            <button type="button" onclick="effacerChoix('propose')">✏️</button>
+        </div>
+
+        <h3>Obligatoires</h3>
+        <div class="form-group">
+            {{ form.propose_shiny.label_tag }}
+            {{ form.propose_shiny }}
+        </div>
+        <div class="form-group">
+            {{ form.propose_genre.label_tag }}
+            {{ form.propose_genre }}
+        </div>
+
+        <h3>Optionnels</h3>
+        <div class="form-group">
+            {{ form.propose_nature.label_tag }}
+            {{ form.propose_nature }}
+        </div>
+        <div class="form-group">
+            {{ form.propose_talent.label_tag }}
+            {{ form.propose_talent }}
+        </div>
+
+        <h3>IVs du Pokémon proposé (optionnel)</h3>
+        <div class="ivs-grid">
+            <div class="form-group">{{ form.propose_iv_pv.label_tag }}{{ form.propose_iv_pv }}</div>
+            <div class="form-group">{{ form.propose_iv_atk.label_tag }}{{ form.propose_iv_atk }}</div>
+            <div class="form-group">{{ form.propose_iv_def.label_tag }}{{ form.propose_iv_def }}</div>
+            <div class="form-group">{{ form.propose_iv_spa.label_tag }}{{ form.propose_iv_spa }}</div>
+            <div class="form-group">{{ form.propose_iv_spd.label_tag }}{{ form.propose_iv_spd }}</div>
+            <div class="form-group">{{ form.propose_iv_spe.label_tag }}{{ form.propose_iv_spe }}</div>
+        </div>
+
+        <h2>⚙️ Paramètres</h2>
+        <div class="form-group">
+            {{ form.methode_echange.label_tag }}
+            {{ form.methode_echange }}
+        </div>
+        <div class="form-group">
+            {{ form.duree.label_tag }}
+            {{ form.duree }}
+        </div>
+
+        <button type="submit" class="btn-primary">
+            Publier l'annonce
+        </button>
+    </form>
+</div>
+
+<script>
+function choisirPokemon(id, nom, element) {
+    const resultats = element.closest('.autocomplete-resultats');
+    const cible = resultats.id.replace('-resultats', '');
+
+    // Remplir le bon champ caché
+    if (cible === 'cherche') {
+        document.getElementById('id_pokemon_cherche_id').value = id;
+    } else {
+        document.getElementById('id_pokemon_propose_id').value = id;
+    }
+
+    document.getElementById(cible + '-nom-affiche').textContent = '#' + id + ' — ' + nom;
+    document.getElementById(cible + '-search').value = '';
+    resultats.innerHTML = '';
+
+    document.getElementById(cible + '-choix').style.display = 'block';
+    document.getElementById(cible + '-search').style.display = 'none';
+}
+
+function effacerChoix(cible) {
+    if (cible === 'cherche') {
+        document.getElementById('id_pokemon_cherche_id').value = '';
+    } else {
+        document.getElementById('id_pokemon_propose_id').value = '';
+    }
+    document.getElementById(cible + '-choix').style.display = 'none';
+    document.getElementById(cible + '-search').style.display = 'block';
+    document.getElementById(cible + '-search').focus();
+}
+</script>
+{% endblock %}

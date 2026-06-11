@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load marketplace_extras %}
+
+{% block title %}Marketplace — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="marketplace-header">
+        <h1>🏪 Marketplace</h1>
+        <a href="{% url 'marketplace:creer_annonce' %}" class="btn-primary">
+            + Créer une annonce
+        </a>
+    </div>
+
+    {% if annonces %}
+        <div class="annonces-liste">
+            {% for annonce in annonces %}
+            <div class="annonce-card">
+                <div class="annonce-cherche">
+                    <span class="label">🔍 Recherche</span>
+                    {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
+                        {% if pokemon %}
+                            <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
+                            <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
+                        {% else %}
+                            <span class="pokemon-nom">#{{ annonce.pokemon_cherche_id }}</span>
+                        {% endif %}
+                    {% endwith %}
+                    {% if annonce.cherche_shiny %}
+                        <span class="badge-shiny">✨ Shiny</span>
+                    {% endif %}
+                    {% if annonce.cherche_nature %}
+                        <span class="badge">{{ annonce.cherche_nature }}</span>
+                    {% endif %}
+                    {% if annonce.cherche_genre %}
+                        <span class="badge">{{ annonce.cherche_genre }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="annonce-propose">
+                    <span class="label">🎁 Propose</span>
+                    {% for p in annonce.propositions %}
+                        {% with pokemon=cache|get_item:p.pokemon_id %}
+                            {% if pokemon %}
+                                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
+                                <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
+                            {% else %}
+                                <span class="pokemon-nom">#{{ p.pokemon_id }}</span>
+                            {% endif %}
+                        {% endwith %}
+                        {% if p.shiny %}
+                            <span class="badge-shiny">✨ Shiny</span>
+                        {% endif %}
+                        {% if p.genre %}
+                            <span class="badge">{{ p.genre }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="annonce-meta">
+                    <span>👤 {{ annonce.user.pseudo }}</span>
+                    <span>📅 {{ annonce.date_creation|date:"d/m/Y" }}</span>
+                    <span>⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}</span>
+                    {% if annonce.methode_echange == 'link_code' %}
+                        <span class="badge">🔗 Link Code</span>
+                    {% elif annonce.methode_echange == 'code_ami' %}
+                        <span class="badge">👤 Code Ami</span>
+                    {% else %}
+                        <span class="badge">🔗👤 Les deux</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucune annonce pour le moment. Sois le premier ! 🎉</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ NATURES = [
     ('naif', 'Naïf'), ('modeste', 'Modeste'),
     ('doux', 'Doux'), ('calme', 'Calme'),
     ('gentil', 'Gentil'), ('pudique', 'Pudique'),
-    ('lache', 'Lâche'), ('pressé', 'Pressé'),
+    ('lache', 'Lâche'), ('presse', 'Pressé'),
     ('mauvais', 'Mauvais'), ('bizarre', 'Bizarre'),
     ('malpoli', 'Malpoli'), ('furieux', 'Furieux'),
     ('prudent', 'Prudent'),
@@ -39,22 +39,23 @@ DUREES = [
 
 class AnnonceForm(forms.Form):
 
-    # Pokémon recherché
+    # Pokémon recherché (champ caché — rempli par l'autocomplete)
     pokemon_cherche_id = forms.IntegerField(
-        label='Pokémon recherché (numéro Pokédex)',
-        min_value=1,
+        widget=forms.HiddenInput(),
     )
 
-    # Précisions optionnelles
-    cherche_shiny = forms.NullBooleanField(
-        label='Shiny ?',
-        required=False,
-        widget=forms.Select(choices=[
-            (None, 'Indifférent'),
-            (True, 'Oui'),
-            (False, 'Non'),
-        ])
+    # Obligatoires
+    cherche_shiny = forms.BooleanField(
+    label='✨ Shiny uniquement',
+    required=False,
     )
+    cherche_genre = forms.ChoiceField(
+        label='Genre',
+        choices=GENRES,
+        required=True,
+    )
+
+    # Optionnels
     cherche_nature = forms.ChoiceField(
         label='Nature',
         choices=NATURES,
@@ -65,31 +66,106 @@ class AnnonceForm(forms.Form):
         choices=TALENTS,
         required=False,
     )
-    cherche_genre = forms.ChoiceField(
-        label='Genre',
-        choices=GENRES,
-        required=False,
-    )
     cherche_commentaire = forms.CharField(
         label='Commentaire libre',
         required=False,
         widget=forms.Textarea(attrs={'rows': 3}),
     )
 
-    # Pokémon proposé (1 seul pour le MVP)
-    pokemon_propose_id = forms.IntegerField(
-        label='Pokémon proposé (numéro Pokédex)',
-        min_value=1,
+    # IVs optionnels (0-31 par stat)
+    iv_pv = forms.IntegerField(
+        label='IVs PV minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    iv_atk = forms.IntegerField(
+        label='IVs Attaque minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    iv_def = forms.IntegerField(
+        label='IVs Défense minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    iv_spa = forms.IntegerField(
+        label='IVs Att. Spé minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    iv_spd = forms.IntegerField(
+        label='IVs Déf. Spé minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    iv_spe = forms.IntegerField(
+        label='IVs Vitesse minimum',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
     )
 
-    # Méthode d'échange
+    # Pokémon proposé (champ caché — rempli par l'autocomplete)
+    pokemon_propose_id = forms.IntegerField(
+        widget=forms.HiddenInput(),
+    )
+
+    # Mêmes champs pour le proposé
+    propose_shiny = forms.BooleanField(
+    label='✨ Mon Pokémon est shiny',
+    required=False,
+    )
+    propose_genre = forms.ChoiceField(
+        label='Genre',
+        choices=GENRES,
+        required=True,
+    )
+    propose_nature = forms.ChoiceField(
+        label='Nature',
+        choices=NATURES,
+        required=False,
+    )
+    propose_talent = forms.ChoiceField(
+        label='Talent',
+        choices=TALENTS,
+        required=False,
+    )
+    propose_iv_pv = forms.IntegerField(
+        label='IVs PV',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    propose_iv_atk = forms.IntegerField(
+        label='IVs Attaque',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    propose_iv_def = forms.IntegerField(
+        label='IVs Défense',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    propose_iv_spa = forms.IntegerField(
+        label='IVs Att. Spé',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    propose_iv_spd = forms.IntegerField(
+        label='IVs Déf. Spé',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+    propose_iv_spe = forms.IntegerField(
+        label='IVs Vitesse',
+        required=False, min_value=0, max_value=31,
+        widget=forms.NumberInput(attrs={'placeholder': '0-31'}),
+    )
+
+    # Paramètres
     methode_echange = forms.ChoiceField(
         label="Méthode d'échange",
         choices=Annonce.METHODE_CHOICES,
     )
-
-    # Durée
     duree = forms.ChoiceField(
-        label='Durée de l\'annonce',
+        label="Durée de l'annonce",
         choices=DUREES,
     )

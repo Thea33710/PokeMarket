@@ -44,4 +44,20 @@ sur une annonce existante.
 
 ---
 
+## 📊 Système de demande de précisions sur les IVs/talents/nature
+
+**Idée :** Si un chercheur veut absolument des IVs/talents/nature précis
+mais que l'annonce ne les spécifie pas, afficher une popup/formulaire
+pour qu'il puisse demander ces précisions à l'annonceur.
+
+**Exemple :**
+- L'annonce ne précise pas les IVs
+- Le visiteur veut absolument 31 en Attaque
+- Il peut envoyer une demande de précisions à l'annonceur
+
+**Complexité :** Moyenne — lié au système de propositions
+**Phase suggérée :** Phase 2
+
+---
+
 *(à compléter au fil du développement)*

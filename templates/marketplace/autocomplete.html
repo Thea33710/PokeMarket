@@ -1,0 +1,9 @@
+{% for pokemon in resultats %}
+<div class="autocomplete-item"
+     onclick="choisirPokemon('{{ pokemon.pokemon_id }}', '{{ pokemon.nom_fr }}', this)">
+    <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="32">
+    <span>#{{ pokemon.pokemon_id }} — {{ pokemon.nom_fr }}</span>
+</div>
+{% empty %}
+<div class="autocomplete-vide">Aucun Pokémon trouvé</div>
+{% endfor %}
