@@ -312,3 +312,27 @@ Aucun ! Tout a fonctionné du premier coup 🎉
 - Cartes complétées : 6/6 ✅
 - Tests Pokédex : 11 tests ✅
 - CI verte ✅
+
+## Session 4 — Sprint 3 — Modèle Annonce
+
+### Ce qu'on a fait
+- Créé l'app Django `marketplace` avec startapp
+- Ajouté `marketplace` dans INSTALLED_APPS
+- Créé le modèle `Annonce` avec tous les champs :
+  pokemon_cherche_id, précisions optionnelles (shiny, nature, ivs_min,
+  talent, genre, commentaire), propositions (JSONField),
+  methode_echange, statut, expires_at
+- Migration créée et appliquée ✅
+- Modèle enregistré dans l'admin Django
+- 19 tests passent, rien de cassé ✅
+- Pushé sur dev
+
+### Problèmes rencontrés
+Aucun !
+
+### État actuel
+- Branche active : dev
+- Modèle Annonce en base ✅
+
+### Prochaines étapes (Sprint 3 suite)
+- Formulaire création annonce (US-09)
