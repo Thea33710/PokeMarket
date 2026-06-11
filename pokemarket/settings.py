@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'pokedex',
+    'marketplace',
 ]
 
 MIDDLEWARE = [
