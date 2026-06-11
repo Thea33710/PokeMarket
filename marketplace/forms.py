@@ -49,7 +49,6 @@ class AnnonceForm(forms.Form):
         label='✨ Shiny uniquement',
         required=False,
     )
-    
 
     # Optionnels
     cherche_nature = forms.ChoiceField(
