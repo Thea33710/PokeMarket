@@ -336,3 +336,30 @@ Aucun !
 
 ### Prochaines étapes (Sprint 3 suite)
 - Formulaire création annonce (US-09)
+
+## Session 4 (suite) — Sprint 3 — Formulaire création annonce (US-09)
+
+### Ce qu'on a fait
+- Créé `marketplace/forms.py` avec AnnonceForm complète
+- Autocomplete par nom de Pokémon via HTMX
+- Champs obligatoires : shiny (case à cocher), genre
+- Champs optionnels : nature, talent, commentaire, IVs (6 stats 0-31)
+- Mêmes champs pour le Pokémon proposé
+- Vue `creer_annonce` et `liste_annonces` avec noms et sprites
+- Filtre templatetag `get_item` pour accéder au cache Pokémon
+- Vue `autocomplete_pokemon` pour la recherche par nom
+- Corrigé erreurs flake8
+- CI verte ✅
+
+### Problèmes rencontrés
+- Autocomplete ne fonctionnait plus → name="q" manquant sur les inputs
+- Clic sur résultat ne fonctionnait plus → IDs des champs cachés incorrects
+- flake8 : variable annonce inutilisée, indentation choices, blank lines
+
+### Idées notées dans IDEES.md
+- Système de listes "je veux / je donne"
+- Système de contre-propositions sur les annonces
+- Popup demande de précisions IVs/talents/nature
+
+### Prochaines étapes
+- Liste + détail annonces + filtres marketplace (US-10)
