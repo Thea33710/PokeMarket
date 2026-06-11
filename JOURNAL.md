@@ -393,3 +393,27 @@ Aucun !
 
 ### Prochaines étapes
 - Liste + détail annonces + filtres marketplace (US-10)
+
+## Session 4 (suite) — Sprint 3 — Liste + détail annonces + filtres (US-10)
+
+### Ce qu'on a fait
+- Page détail annonce avec tous les champs (cherché + proposé + méthode)
+- Lien "Voir le détail →" sur chaque carte de la liste
+- Filtres JavaScript : recherche par nom (proposé uniquement), shiny proposé, méthode d'échange
+- Attributs data- sur les cartes pour les filtres
+- Compteur d'annonces affichées
+- Correction : recherche filtre sur le Pokémon proposé (celui qu'on reçoit)
+- Correction : filtre shiny sur le Pokémon proposé
+- CI verte ✅
+
+### Problèmes rencontrés
+- Deux divs annonce-card imbriquées → compteur affichait 2 au lieu de 1
+- dataset.noms_propose → camelCase en JS → dataset.nomsPropose
+- noms_annonces non défini → oublié dans le return de la vue
+
+### Idées notées dans IDEES.md
+- Filtres marketplace côté "je donne"
+- Normalisation des accents dans toutes les recherches
+
+### Prochaines étapes
+- Clôture + expiration automatique annonces (7/14/30j)
