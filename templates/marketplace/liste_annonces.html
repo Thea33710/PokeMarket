@@ -32,8 +32,15 @@
                     {% if annonce.cherche_nature %}
                         <span class="badge">{{ annonce.cherche_nature }}</span>
                     {% endif %}
+                    {% if annonce.cherche_talents %}
+                        {% for talent in annonce.cherche_talents %}
+                            <span class="badge">{{ talent }}</span>
+                        {% endfor %}
+                    {% endif %}
                     {% if annonce.cherche_genre %}
-                        <span class="badge">{{ annonce.cherche_genre }}</span>
+                        {% for g in annonce.cherche_genre %}
+                            <span class="badge">{{ g }}</span>
+                        {% endfor %}
                     {% endif %}
                 </div>
 
@@ -52,7 +59,17 @@
                             <span class="badge-shiny">✨ Shiny</span>
                         {% endif %}
                         {% if p.genre %}
-                            <span class="badge">{{ p.genre }}</span>
+                            {% for g in p.genre %}
+                                <span class="badge">{{ g }}</span>
+                            {% endfor %}
+                        {% endif %}
+                        {% if p.nature %}
+                            <span class="badge">{{ p.nature }}</span>
+                        {% endif %}
+                        {% if p.talents %}
+                            {% for talent in p.talents %}
+                                <span class="badge">{{ talent }}</span>
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
                 </div>

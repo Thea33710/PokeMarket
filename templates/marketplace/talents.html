@@ -1,0 +1,11 @@
+{% for talent in talents %}
+<label class="talent-item">
+    <input type="checkbox"
+           name="{{ cible }}_talents"
+           value="{{ talent.nom }}">
+    {{ talent.nom }}
+    {% if talent.cache %}🌟{% endif %}
+</label>
+{% empty %}
+<p class="talent-vide">Aucun talent disponible</p>
+{% endfor %}

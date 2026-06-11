@@ -24,6 +24,10 @@ def creer_annonce(request):
                     ivs_cherche[stat] = val
             ivs_cherche = ivs_cherche or None
 
+            # Talents cochés
+            talents_cherche = request.POST.getlist('cherche_talents') or None
+            talents_propose = request.POST.getlist('propose_talents') or None
+
             # Construire les IVs proposés
             ivs_propose = {}
             for stat in ['pv', 'atk', 'def', 'spa', 'spd', 'spe']:
@@ -44,15 +48,15 @@ def creer_annonce(request):
                 pokemon_cherche_id=form.cleaned_data['pokemon_cherche_id'],
                 cherche_shiny=shiny_cherche,
                 cherche_nature=form.cleaned_data['cherche_nature'] or None,
-                cherche_talent=form.cleaned_data['cherche_talent'] or None,
                 cherche_genre=form.cleaned_data['cherche_genre'] or None,
                 cherche_commentaire=form.cleaned_data['cherche_commentaire'] or None,
                 cherche_ivs_min=ivs_cherche,
+                cherche_talents=talents_cherche,
                 propositions=[{
                     'pokemon_id': form.cleaned_data['pokemon_propose_id'],
                     'shiny': shiny_propose,
                     'nature': form.cleaned_data['propose_nature'] or None,
-                    'talent': form.cleaned_data['propose_talent'] or None,
+                    'talents': talents_propose,
                     'genre': form.cleaned_data['propose_genre'] or None,
                     'ivs': ivs_propose,
                 }],
@@ -98,4 +102,20 @@ def autocomplete_pokemon(request):
         ).order_by('pokemon_id')[:10]
     return render(request, 'marketplace/autocomplete.html', {
         'resultats': resultats
+    })
+
+
+def talents_pokemon(request):
+    pokemon_id = request.GET.get('pokemon_id')
+    cible = request.GET.get('cible', 'cherche')
+    talents = []
+    if pokemon_id:
+        try:
+            pokemon = PokemonCache.objects.get(pokemon_id=pokemon_id)
+            talents = pokemon.talents
+        except PokemonCache.DoesNotExist:
+            pass
+    return render(request, 'marketplace/talents.html', {
+        'talents': talents,
+        'cible': cible,
     })

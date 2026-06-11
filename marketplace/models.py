@@ -46,8 +46,9 @@ class Annonce(models.Model):
     cherche_nature = models.CharField(max_length=20, null=True, blank=True)
     cherche_ivs_min = models.JSONField(null=True, blank=True)
     cherche_talent = models.CharField(max_length=10, null=True, blank=True)
-    cherche_genre = models.CharField(max_length=10, null=True, blank=True)
+    cherche_genre = models.JSONField(null=True, blank=True)
     cherche_commentaire = models.TextField(null=True, blank=True)
+    cherche_talents = models.JSONField(null=True, blank=True)  # ex: ['Engrais', 'Protéen']
 
     # Ce que l'annonceur propose
     propositions = models.JSONField()

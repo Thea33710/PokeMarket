@@ -19,7 +19,7 @@
             <input type="text"
                    id="cherche-search"
                    name="q"
-                   placeholder="Tape un nom... ex: Bulbi"
+                   placeholder="Tape un nom... ex: Poussacha"
                    autocomplete="off"
                    hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
                    hx-trigger="keyup changed delay:300ms"
@@ -47,10 +47,14 @@
             {{ form.cherche_nature.label_tag }}
             {{ form.cherche_nature }}
         </div>
+
         <div class="form-group">
-            {{ form.cherche_talent.label_tag }}
-            {{ form.cherche_talent }}
+            <label>Talents souhaités</label>
+            <div id="cherche-talents" class="talents-liste">
+                <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+            </div>
         </div>
+
         <div class="form-group">
             {{ form.cherche_commentaire.label_tag }}
             {{ form.cherche_commentaire }}
@@ -73,7 +77,7 @@
             <input type="text"
                    id="propose-search"
                    name="q"
-                   placeholder="Tape un nom... ex: Salame"
+                   placeholder="Tape un nom... ex: Aquali"
                    autocomplete="off"
                    hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
                    hx-trigger="keyup changed delay:300ms"
@@ -101,9 +105,12 @@
             {{ form.propose_nature.label_tag }}
             {{ form.propose_nature }}
         </div>
+
         <div class="form-group">
-            {{ form.propose_talent.label_tag }}
-            {{ form.propose_talent }}
+            <label>Talents du Pokémon proposé</label>
+            <div id="propose-talents" class="talents-liste">
+                <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+            </div>
         </div>
 
         <h3>IVs du Pokémon proposé (optionnel)</h3>
@@ -137,7 +144,6 @@ function choisirPokemon(id, nom, element) {
     const resultats = element.closest('.autocomplete-resultats');
     const cible = resultats.id.replace('-resultats', '');
 
-    // Remplir le bon champ caché
     if (cible === 'cherche') {
         document.getElementById('id_pokemon_cherche_id').value = id;
     } else {
@@ -150,6 +156,12 @@ function choisirPokemon(id, nom, element) {
 
     document.getElementById(cible + '-choix').style.display = 'block';
     document.getElementById(cible + '-search').style.display = 'none';
+
+    // Charger les talents via HTMX
+    htmx.ajax('GET', '/marketplace/talents/?pokemon_id=' + id + '&cible=' + cible, {
+        target: '#' + cible + '-talents',
+        swap: 'innerHTML'
+    });
 }
 
 function effacerChoix(cible) {
@@ -161,6 +173,8 @@ function effacerChoix(cible) {
     document.getElementById(cible + '-choix').style.display = 'none';
     document.getElementById(cible + '-search').style.display = 'block';
     document.getElementById(cible + '-search').focus();
+    document.getElementById(cible + '-talents').innerHTML =
+        '<p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>';
 }
 </script>
 {% endblock %}

@@ -49,11 +49,7 @@ class AnnonceForm(forms.Form):
         label='✨ Shiny uniquement',
         required=False,
     )
-    cherche_genre = forms.ChoiceField(
-        label='Genre',
-        choices=GENRES,
-        required=True,
-    )
+    
 
     # Optionnels
     cherche_nature = forms.ChoiceField(
@@ -61,10 +57,11 @@ class AnnonceForm(forms.Form):
         choices=NATURES,
         required=False,
     )
-    cherche_talent = forms.ChoiceField(
-        label='Talent',
-        choices=TALENTS,
+    cherche_genre = forms.MultipleChoiceField(
+        label='Genre souhaité',
+        choices=[('male', 'Mâle'), ('femelle', 'Femelle')],
         required=False,
+        widget=forms.CheckboxSelectMultiple,
     )
     cherche_commentaire = forms.CharField(
         label='Commentaire libre',
@@ -114,10 +111,11 @@ class AnnonceForm(forms.Form):
         label='✨ Mon Pokémon est shiny',
         required=False,
     )
-    propose_genre = forms.ChoiceField(
-        label='Genre',
-        choices=GENRES,
-        required=True,
+    propose_genre = forms.MultipleChoiceField(
+        label='Genre du Pokémon proposé',
+        choices=[('male', 'Mâle'), ('femelle', 'Femelle')],
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
     )
     propose_nature = forms.ChoiceField(
         label='Nature',
