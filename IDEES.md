@@ -60,4 +60,22 @@ pour qu'il puisse demander ces précisions à l'annonceur.
 
 ---
 
+## 🎮 Jeux possédés sur le profil utilisateur
+
+**Idée :** Ajouter un champ `jeux_possedes` sur le modèle User pour
+que l'utilisateur puisse indiquer quels jeux il possède.
+
+**Utilité :**
+- Pré-sélectionner automatiquement le bon jeu dans le formulaire d'annonce
+- Personnaliser l'expérience marketplace selon les jeux possédés
+
+**À faire :**
+- Ajouter `jeux_possedes = models.ManyToManyField(Jeu, blank=True)` dans User
+- Créer la migration
+- Ajouter le champ sur la page profil (Sprint 4)
+
+**Phase suggérée :** Sprint 4 — page profil
+
+---
+
 *(à compléter au fil du développement)*
