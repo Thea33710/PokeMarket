@@ -78,4 +78,29 @@ que l'utilisateur puisse indiquer quels jeux il possède.
 
 ---
 
+## 🔍 Filtres marketplace — côté "je donne"
+
+**Idée :** Ajouter un deuxième mode de recherche dans la marketplace :
+- Côté "je cherche" (actuel) — je cherche un Pokémon à recevoir
+- Côté "je donne" — je cherche quelqu'un à qui donner mon Pokémon
+
+**Note :** Le côté "je donne" ressemble plus à une enchère —
+nécessiterait peut-être une discussion ou une négociation entre joueurs.
+
+**Phase suggérée :** Phase 2
+
+---
+
+## 🔤 Normalisation des accents dans les recherches
+
+**Idée :** Permettre de chercher "evoli" et trouver "Évoli",
+"poussacha" et trouver "Poussacha", etc.
+Appliquer partout : marketplace, pokédex, autocomplete.
+
+**Solution :** normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+**Phase suggérée :** Sprint 5 — finalisation
+
+---
+
 *(à compléter au fil du développement)*

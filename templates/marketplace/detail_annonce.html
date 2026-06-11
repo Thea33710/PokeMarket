@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load marketplace_extras %}
+
+{% block title %}Annonce #{{ annonce.pk }} — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'marketplace:liste_annonces' %}">← Retour à la liste</a>
+
+    <h1>📢 Annonce #{{ annonce.pk }}</h1>
+    <p>👤 {{ annonce.user.pseudo }} — 📅 {{ annonce.date_creation|date:"d/m/Y" }} — ⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}</p>
+
+    <div class="detail-section">
+        <h2>🔍 Pokémon recherché</h2>
+        {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
+            {% if pokemon %}
+                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="80">
+                <h3>{{ pokemon.nom_fr }}</h3>
+            {% endif %}
+        {% endwith %}
+
+        <ul>
+            {% if annonce.cherche_shiny %}<li>✨ Shiny souhaité</li>{% endif %}
+            {% if annonce.cherche_genre %}
+                <li>Genre :
+                    {% for g in annonce.cherche_genre %}{{ g }} {% endfor %}
+                </li>
+            {% endif %}
+            {% if annonce.cherche_nature %}<li>Nature : {{ annonce.cherche_nature }}</li>{% endif %}
+            {% if annonce.cherche_talents %}
+                <li>Talents :
+                    {% for t in annonce.cherche_talents %}{{ t }} {% endfor %}
+                </li>
+            {% endif %}
+            {% if annonce.cherche_ivs_min %}
+                <li>IVs minimum :
+                    {% for stat, val in annonce.cherche_ivs_min.items %}
+                        {{ stat }} : {{ val }}
+                    {% endfor %}
+                </li>
+            {% endif %}
+            {% if annonce.cherche_commentaire %}<li>💬 {{ annonce.cherche_commentaire }}</li>{% endif %}
+        </ul>
+    </div>
+
+    <div class="detail-section">
+        <h2>🎁 Pokémon proposé</h2>
+        {% for p in annonce.propositions %}
+            {% with pokemon=cache|get_item:p.pokemon_id %}
+                {% if pokemon %}
+                    <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="80">
+                    <h3>{{ pokemon.nom_fr }}</h3>
+                {% endif %}
+            {% endwith %}
+            <ul>
+                {% if p.shiny %}<li>✨ Shiny</li>{% endif %}
+                {% if p.genre %}
+                    <li>Genre :
+                        {% for g in p.genre %}{{ g }} {% endfor %}
+                    </li>
+                {% endif %}
+                {% if p.nature %}<li>Nature : {{ p.nature }}</li>{% endif %}
+                {% if p.talents %}
+                    <li>Talents :
+                        {% for t in p.talents %}{{ t }} {% endfor %}
+                    </li>
+                {% endif %}
+                {% if p.ivs %}
+                    <li>IVs :
+                        {% for stat, val in p.ivs.items %}
+                            {{ stat }} : {{ val }}
+                        {% endfor %}
+                    </li>
+                {% endif %}
+            </ul>
+        {% endfor %}
+    </div>
+
+    <div class="detail-section">
+        <h2>⚙️ Méthode d'échange</h2>
+        {% if annonce.methode_echange == 'link_code' %}
+            <p>🔗 Link Code uniquement</p>
+        {% elif annonce.methode_echange == 'code_ami' %}
+            <p>👤 Code Ami Switch uniquement</p>
+        {% else %}
+            <p>🔗👤 Link Code ou Code Ami Switch</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

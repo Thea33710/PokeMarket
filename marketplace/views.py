@@ -87,9 +87,34 @@ def liste_annonces(request):
         for p in PokemonCache.objects.filter(pokemon_id__in=ids)
     }
 
+    # Noms pour la recherche (proposé uniquement)
+    noms_propose = {}
+    for annonce in annonces:
+        noms = []
+        for p in annonce.propositions:
+            pokemon_propose = cache.get(p['pokemon_id'])
+            if pokemon_propose:
+                noms.append(pokemon_propose.nom_fr.lower())
+        noms_propose[annonce.pk] = ' '.join(noms)
+
+    # Noms pour data-noms (tous)
+    noms_annonces = {}
+    for annonce in annonces:
+        noms = []
+        pokemon_cherche = cache.get(annonce.pokemon_cherche_id)
+        if pokemon_cherche:
+            noms.append(pokemon_cherche.nom_fr.lower())
+        for p in annonce.propositions:
+            pokemon_propose = cache.get(p['pokemon_id'])
+            if pokemon_propose:
+                noms.append(pokemon_propose.nom_fr.lower())
+        noms_annonces[annonce.pk] = ' '.join(noms)
+
     return render(request, 'marketplace/liste_annonces.html', {
         'annonces': annonces,
         'cache': cache,
+        'noms_annonces': noms_annonces,
+        'noms_propose': noms_propose,
     })
 
 
@@ -118,4 +143,21 @@ def talents_pokemon(request):
     return render(request, 'marketplace/talents.html', {
         'talents': talents,
         'cible': cible,
+    })
+
+
+@login_required
+def detail_annonce(request, pk):
+    annonce = Annonce.objects.get(pk=pk)
+    ids = set()
+    ids.add(annonce.pokemon_cherche_id)
+    for p in annonce.propositions:
+        ids.add(p['pokemon_id'])
+    cache = {
+        p.pokemon_id: p
+        for p in PokemonCache.objects.filter(pokemon_id__in=ids)
+    }
+    return render(request, 'marketplace/detail_annonce.html', {
+        'annonce': annonce,
+        'cache': cache,
     })

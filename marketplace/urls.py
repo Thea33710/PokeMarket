@@ -8,4 +8,5 @@ urlpatterns = [
     path('creer/', views.creer_annonce, name='creer_annonce'),
     path('autocomplete/', views.autocomplete_pokemon, name='autocomplete_pokemon'),
     path('talents/', views.talents_pokemon, name='talents_pokemon'),
+    path('<int:pk>/', views.detail_annonce, name='detail_annonce'),
 ]
