@@ -489,3 +489,10 @@ Aucun !
 - Popup avertissement avant affichage du Code Ami Switch (bouton "J'ai compris")
 - Message si Code Ami non public ou non renseigné
 - Bandeau informatif sur liste_annonces, detail_annonce et creer_annonce si Code Ami non renseigné
+
+### Confirmation bilatérale échange + incrément nb_échanges
+- Champs `confirme_demandeur` et `confirme_annonceur` ajoutés sur le modèle Echange
+- Vue `confirmer_echange` : confirmation bilatérale, incrément nb_echanges, clôture annonce
+- Bouton de confirmation dans detail_echange
+- ⚠️ À vérifier : l'annonceur n'a pas encore accès à ses échanges en cours
+  (dépend de la page profil/tableau de bord — Sprint 4)
