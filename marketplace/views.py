@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
@@ -148,7 +148,7 @@ def talents_pokemon(request):
 
 @login_required
 def detail_annonce(request, pk):
-    annonce = Annonce.objects.get(pk=pk)
+    annonce = get_object_or_404(Annonce, pk=pk, user=request.user)
     ids = set()
     ids.add(annonce.pokemon_cherche_id)
     for p in annonce.propositions:
@@ -165,7 +165,7 @@ def detail_annonce(request, pk):
 
 @login_required
 def clore_annonce(request, pk):
-    annonce = Annonce.objects.get(pk=pk, user=request.user)
+    annonce = get_object_or_404(Annonce, pk=pk, user=request.user)
     if request.method == 'POST':
         annonce.statut = 'terminee'
         annonce.save()

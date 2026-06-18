@@ -162,3 +162,76 @@ class TestVueMarquer(TestCase):
         url = reverse('pokedex:marquer', args=[self.pokedex.pk, 906, 'vu'])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
+
+
+class TestVuesPokedex(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testeur3',
+            email='test3@test.com',
+            pseudo='testeur3',
+            password='testpass123',
+        )
+        self.jeu = Jeu.objects.create(
+            nom='Pokémon Écarlate & Violet',
+            generation=9,
+            plateforme='Switch',
+            echanges_online=True,
+            pokedex_regional=[906, 907],
+        )
+        PokemonCache.objects.create(
+            pokemon_id=906,
+            nom_fr='Poussacha',
+            sprite_url='https://example.com/906.png',
+            types=['plante'],
+        )
+        PokemonCache.objects.create(
+            pokemon_id=907,
+            nom_fr='Évoli',
+            sprite_url='https://example.com/907.png',
+            types=['normal'],
+        )
+        self.pokedex = Pokedex.objects.create(
+            user=self.user,
+            nom='Mon Pokédex',
+            jeu=self.jeu,
+            pokemon_statuses={},
+        )
+
+    def test_liste_pokedex_non_connecte(self):
+        response = self.client.get(reverse('pokedex:liste'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_liste_pokedex_connecte(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('pokedex:liste'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_creer_pokedex_get(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('pokedex:creer'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_creer_pokedex_post(self):
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('pokedex:creer'), {
+            'nom': 'Nouveau Pokédex',
+            'jeu': self.jeu.pk,
+            'type_vue': 'regional',
+            'mode_shiny': False,
+        })
+        self.assertEqual(Pokedex.objects.filter(user=self.user).count(), 2)
+
+    def test_detail_pokedex_connecte(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            reverse('pokedex:detail', args=[self.pokedex.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_detail_pokedex_non_connecte(self):
+        response = self.client.get(
+            reverse('pokedex:detail', args=[self.pokedex.pk])
+        )
+        self.assertEqual(response.status_code, 302)
