@@ -51,7 +51,28 @@
         {% endif %}
     </div>
     {% endif %}
-
+    {% if echange.statut == 'en_attente' %}
+    <div class="detail-section">
+        <h2>✅ Confirmer l'échange</h2>
+        {% if request.user == echange.user_demandeur %}
+        {% if echange.confirme_demandeur %}
+        <p>✅ Tu as déjà confirmé. En attente de {{ echange.annonce.user.pseudo }}.</p>
+        {% else %}
+        <a href="{% url 'marketplace:confirmer_echange' echange.pk %}">
+            ✅ Confirmer que l'échange a eu lieu
+        </a>
+        {% endif %}
+        {% else %}
+        {% if echange.confirme_annonceur %}
+        <p>✅ Tu as déjà confirmé. En attente de {{ echange.user_demandeur.pseudo }}.</p>
+        {% else %}
+        <a href="{% url 'marketplace:confirmer_echange' echange.pk %}">
+            ✅ Confirmer que l'échange a eu lieu
+        </a>
+        {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
     <div class="detail-section">
         <h2>📊 Statut</h2>
         <p>{{ echange.get_statut_display }}</p>

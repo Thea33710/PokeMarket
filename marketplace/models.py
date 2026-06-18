@@ -117,6 +117,8 @@ class Echange(models.Model):
         choices=STATUT_CHOICES,
         default='en_attente'
     )
+    confirme_demandeur = models.BooleanField(default=False)
+    confirme_annonceur = models.BooleanField(default=False)
     confirmed_at = models.DateTimeField(null=True, blank=True)
     date_creation = models.DateTimeField(auto_now_add=True)
 

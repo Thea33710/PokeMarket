@@ -244,3 +244,49 @@ def detail_echange(request, pk):
     return render(request, 'marketplace/detail_echange.html', {
         'echange': echange,
     })
+
+
+@login_required
+def confirmer_echange(request, pk):
+    echange = get_object_or_404(Echange, pk=pk, statut='en_attente')
+
+    # Vérifier que l'utilisateur est bien l'un des deux joueurs
+    if (request.user != echange.user_demandeur
+            and request.user != echange.annonce.user):
+        messages.error(request, "Tu n'as pas accès à cet échange.")
+        return redirect('marketplace:liste_annonces')
+
+    # Enregistrer la confirmation
+    if request.user == echange.user_demandeur:
+        echange.confirme_demandeur = True
+    else:
+        echange.confirme_annonceur = True
+
+    echange.save()
+
+    # Si les deux ont confirmé
+    if echange.confirme_demandeur and echange.confirme_annonceur:
+        echange.statut = 'confirme'
+        echange.confirmed_at = timezone.now()
+        echange.save()
+
+        # Incrémenter nb_echanges des deux joueurs
+        echange.user_demandeur.nb_echanges += 1
+        echange.user_demandeur.save()
+        echange.annonce.user.nb_echanges += 1
+        echange.annonce.user.save()
+
+        # Clore l'annonce
+        echange.annonce.statut = 'terminee'
+        echange.annonce.save()
+
+        messages.success(request, "🎉 Échange confirmé !")
+
+    else:
+        messages.success(
+            request,
+            "✅ Ta confirmation a été enregistrée. "
+            "En attente de l'autre joueur."
+        )
+
+    return redirect('marketplace:detail_echange', pk=echange.pk)

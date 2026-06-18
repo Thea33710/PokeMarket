@@ -24,4 +24,9 @@ urlpatterns = [
         views.detail_echange,
         name='detail_echange'
     ),
+    path(
+        'echanges/<int:pk>/confirmer/',
+        views.confirmer_echange,
+        name='confirmer_echange'
+    ),
 ]
