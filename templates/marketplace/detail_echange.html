@@ -26,6 +26,32 @@
     </div>
     {% endif %}
 
+    {% if echange.methode_utilisee == 'code_ami' %}
+    <div class="detail-section">
+        <h2>👤 Code Ami Switch</h2>
+        {% if echange.annonce.user.visibilite_code_ami == 'public' and echange.annonce.user.code_ami_switch %}
+        <div id="popup-avertissement">
+            <p>⚠️ Tu es sur le point de voir le Code Ami Switch de {{ echange.annonce.user.pseudo }}.</p>
+            <p>Ne partage ce code à personne d'autre.</p>
+            <button onclick="afficherCodeAmi()">✅ J'ai compris, afficher le code</button>
+        </div>
+        <div id="code-ami" style="display:none;">
+            <p style="font-size: 2rem; text-align: center;">
+                <strong>{{ echange.annonce.user.code_ami_switch }}</strong>
+            </p>
+        </div>
+        <script>
+            function afficherCodeAmi() {
+                document.getElementById('popup-avertissement').style.display = 'none';
+                document.getElementById('code-ami').style.display = 'block';
+            }
+        </script>
+        {% else %}
+        <p>😕 {{ echange.annonce.user.pseudo }} n'a pas rendu son Code Ami public.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <div class="detail-section">
         <h2>📊 Statut</h2>
         <p>{{ echange.get_statut_display }}</p>

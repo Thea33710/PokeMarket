@@ -483,3 +483,9 @@ Aucun !
 - Vue `detail_echange` : page Link Code visible uniquement aux deux joueurs
 - Bouton "Proposer un échange" dans `detail_annonce.html`
 - setup.cfg créé pour exclure les migrations de flake8
+
+### Flux Code Ami Switch + popup avertissement (US-12, US-13)
+- Adaptation de `proposer_echange` : Link Code par défaut, Code Ami uniquement si méthode exclusive
+- Popup avertissement avant affichage du Code Ami Switch (bouton "J'ai compris")
+- Message si Code Ami non public ou non renseigné
+- Bandeau informatif sur liste_annonces, detail_annonce et creer_annonce si Code Ami non renseigné

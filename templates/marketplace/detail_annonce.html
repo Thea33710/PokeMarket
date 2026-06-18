@@ -5,6 +5,11 @@
 
 {% block content %}
 <div class="container">
+    {% if user.is_authenticated and not user.code_ami_switch %}
+    <div class="bandeau-info">
+        💡 Tu n'as pas renseigné ton Code Ami Switch. Les échanges par Code Ami ne seront pas disponibles pour tes annonces.
+    </div>
+    {% endif %}
     <a href="{% url 'marketplace:liste_annonces' %}">← Retour à la liste</a>
 
     <h1>📢 Annonce #{{ annonce.pk }}</h1>

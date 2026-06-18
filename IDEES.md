@@ -1,7 +1,7 @@
 # 💡 Idées à explorer — PokéMarket
 
 Ce fichier note les idées identifiées pendant le développement,
-à étudier pour une phase future.
+à explorer après le MVP.
 
 ---
 
@@ -18,7 +18,6 @@ par deux listes séparées :
 - Réduit le nombre d'annonces dupliquées
 
 **Complexité :** Moyenne — changerait le modèle Annonce et l'interface
-**Phase suggérée :** Phase 2 ou refonte MVP si le temps le permet
 
 ---
 
@@ -40,7 +39,6 @@ sur une annonce existante.
 
 **Complexité :** Moyenne — nécessite un modèle Proposition lié à Annonce
 + notifications pour l'annonceur
-**Phase suggérée :** Phase 2
 
 ---
 
@@ -56,7 +54,6 @@ pour qu'il puisse demander ces précisions à l'annonceur.
 - Il peut envoyer une demande de précisions à l'annonceur
 
 **Complexité :** Moyenne — lié au système de propositions
-**Phase suggérée :** Phase 2
 
 ---
 
@@ -74,8 +71,6 @@ que l'utilisateur puisse indiquer quels jeux il possède.
 - Créer la migration
 - Ajouter le champ sur la page profil (Sprint 4)
 
-**Phase suggérée :** Sprint 4 — page profil
-
 ---
 
 ## 🔍 Filtres marketplace — côté "je donne"
@@ -87,8 +82,6 @@ que l'utilisateur puisse indiquer quels jeux il possède.
 **Note :** Le côté "je donne" ressemble plus à une enchère —
 nécessiterait peut-être une discussion ou une négociation entre joueurs.
 
-**Phase suggérée :** Phase 2
-
 ---
 
 ## 🔤 Normalisation des accents dans les recherches
@@ -99,7 +92,31 @@ Appliquer partout : marketplace, pokédex, autocomplete.
 
 **Solution :** normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
-**Phase suggérée :** Sprint 5 — finalisation
+---
+
+## ⚙️ Préférence méthode d'échange par utilisateur
+
+**Idée :** Ajouter une préférence "méthode d'échange préférée" (Link Code / Code Ami Switch)
+dans les réglages du profil utilisateur.
+Si l'annonce accepte les deux, utiliser la préférence de l'utilisateur.
+Par défaut : Link Code (pas de données personnelles partagées).
+
+**Solution :** Champ `methode_preferee` sur le modèle `User` + case à cocher dans les réglages profil.
+
+---
+
+## 💡 Bandeau informatif Code Ami Switch non renseigné
+
+**Idée :** Afficher un bandeau discret (jaune/orange) sur les pages marketplace
+si l'utilisateur connecté n'a pas renseigné son Code Ami Switch.
+Message : "Tu n'as pas renseigné ton Code Ami Switch. Les échanges par Code Ami
+ne seront pas disponibles pour tes annonces. [Renseigner mon code ami →]"
+Le bandeau disparaît automatiquement si le code est renseigné.
+Ne pas afficher si l'utilisateur n'a volontairement pas renseigné son code
+(ajouter une option "ne plus afficher").
+
+**Solution envisagée :** Vérification dans le contexte template +
+bandeau conditionnel dans `base.html` ou dans les templates marketplace.
 
 ---
 

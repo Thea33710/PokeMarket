@@ -188,7 +188,6 @@ def clore_annonce(request, pk):
 def proposer_echange(request, annonce_id):
     annonce = get_object_or_404(Annonce, pk=annonce_id, statut='ouverte')
 
-    # On ne peut pas proposer un échange sur sa propre annonce
     if annonce.user == request.user:
         messages.error(
             request,
@@ -196,7 +195,6 @@ def proposer_echange(request, annonce_id):
         )
         return redirect('marketplace:detail_annonce', pk=annonce_id)
 
-    # Échange en attente déjà existant ?
     echange_existant = Echange.objects.filter(
         annonce=annonce,
         user_demandeur=request.user,
@@ -206,14 +204,25 @@ def proposer_echange(request, annonce_id):
     if echange_existant:
         return redirect('marketplace:detail_echange', pk=echange_existant.pk)
 
-    # Créer l'échange avec Link Code
-    link_code = generer_link_code()
+    # Déterminer la méthode
+    if annonce.methode_echange in ('link_code', 'les_deux'):
+        methode = 'link_code'
+    else:
+        methode = 'code_ami'
+
+    # Créer l'échange
+    link_code = generer_link_code() if methode == 'link_code' else None
+    expires = (
+        timezone.now() + timedelta(hours=24) if methode == 'link_code'
+        else None
+    )
+
     echange = Echange.objects.create(
         annonce=annonce,
         user_demandeur=request.user,
-        methode_utilisee='link_code',
+        methode_utilisee=methode,
         link_code=link_code,
-        link_code_expires_at=timezone.now() + timedelta(hours=24),
+        link_code_expires_at=expires,
         statut='en_attente'
     )
 
