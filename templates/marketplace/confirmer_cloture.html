@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Clore l'annonce — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🔒 Clore l'annonce</h1>
+    <p>Tu es sur le point de clore ton annonce pour le Pokémon <strong>#{{ annonce.pokemon_cherche_id }}</strong>.</p>
+    <p>Cette action est irréversible.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-primary">Confirmer la clôture</button>
+        <a href="{% url 'marketplace:detail_annonce' annonce.pk %}">Annuler</a>
+    </form>
+</div>
+{% endblock %}

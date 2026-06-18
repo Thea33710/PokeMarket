@@ -9,4 +9,5 @@ urlpatterns = [
     path('autocomplete/', views.autocomplete_pokemon, name='autocomplete_pokemon'),
     path('talents/', views.talents_pokemon, name='talents_pokemon'),
     path('<int:pk>/', views.detail_annonce, name='detail_annonce'),
+    path('<int:pk>/clore/', views.clore_annonce, name='clore_annonce'),
 ]

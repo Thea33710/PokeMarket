@@ -161,3 +161,14 @@ def detail_annonce(request, pk):
         'annonce': annonce,
         'cache': cache,
     })
+
+@login_required
+def clore_annonce(request, pk):
+    annonce = Annonce.objects.get(pk=pk, user=request.user)
+    if request.method == 'POST':
+        annonce.statut = 'terminee'
+        annonce.save()
+        return redirect('marketplace:liste_annonces')
+    return render(request, 'marketplace/confirmer_cloture.html', {
+        'annonce': annonce,
+    })
