@@ -417,3 +417,22 @@ Aucun !
 
 ### Prochaines étapes
 - Clôture + expiration automatique annonces (7/14/30j)
+
+## Session 5 — Sprint 3 — Clôture + expiration automatique annonces
+
+### Ce qu'on a fait
+- Vue `clore_annonce` : l'annonceur peut fermer son annonce manuellement
+- Template `confirmer_cloture.html` avec confirmation avant clôture
+- Bouton "Clore l'annonce" visible uniquement par l'annonceur sur la page détail
+- Commande de gestion `expirer_annonces` : passe les annonces expirées en statut `expiree`
+- CI verte ✅
+
+### Problèmes rencontrés
+- flake8 : 1 ligne vide au lieu de 2 avant clore_annonce
+
+### État actuel
+- Clôture manuelle ✅
+- Expiration automatique ✅
+
+### Prochaines étapes
+- Tests unitaires Marketplace + sprint review (dernière carte Sprint 3)
