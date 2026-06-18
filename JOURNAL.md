@@ -496,3 +496,11 @@ Aucun !
 - Bouton de confirmation dans detail_echange
 - ⚠️ À vérifier : l'annonceur n'a pas encore accès à ses échanges en cours
   (dépend de la page profil/tableau de bord — Sprint 4)
+
+### Profil utilisateur (US-15)
+- Vue `profil` dans `accounts/views.py`
+- Liste des propositions reçues sur ses annonces
+- Liste de ses propositions envoyées
+- Affichage Code Ami Switch + visibilité
+- Boutons Pokédex / Marketplace / Profil ajoutés dans la nav
+- Confirmation bilatérale débloquée (annonceur peut maintenant accéder à ses échanges)
