@@ -473,3 +473,13 @@ Aucun !
 
 ### Prochaines étapes
 - Sprint 4 : Mise en relation (Echange model, Link Code, Code Ami, profil)
+
+## Sprint 4
+
+### Modèle Echange + Link Code (US-11)
+- Ajout modèle `Echange` dans `marketplace/models.py`
+- Fonction `generer_link_code()` format XXXX-XXXX
+- Vue `proposer_echange` : création échange avec Link Code, expiration 24h
+- Vue `detail_echange` : page Link Code visible uniquement aux deux joueurs
+- Bouton "Proposer un échange" dans `detail_annonce.html`
+- setup.cfg créé pour exclure les migrations de flake8
