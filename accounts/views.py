@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from marketplace.models import Echange
 from .forms import InscriptionForm
 from .models import User
 
@@ -80,3 +82,24 @@ def deconnexion(request):
     """Déconnexion."""
     logout(request)
     return redirect('/')
+
+
+@login_required
+def profil(request):
+    """Page profil utilisateur."""
+    # Échanges en cours où l'utilisateur est demandeur
+    echanges_demandes = Echange.objects.filter(
+        user_demandeur=request.user,
+        statut='en_attente'
+    ).select_related('annonce', 'annonce__user')
+
+    # Échanges en cours sur les annonces de l'utilisateur
+    echanges_recus = Echange.objects.filter(
+        annonce__user=request.user,
+        statut='en_attente'
+    ).select_related('annonce', 'user_demandeur')
+
+    return render(request, 'accounts/profil.html', {
+        'echanges_demandes': echanges_demandes,
+        'echanges_recus': echanges_recus,
+    })

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Mon profil — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👤 Mon profil</h1>
+    <p>Pseudo : {{ user.pseudo }}</p>
+    <p>Email : {{ user.email }}</p>
+    <p>🔄 Échanges effectués : {{ user.nb_echanges }}</p>
+
+    <div class="detail-section">
+        <h2>🔑 Code Ami Switch</h2>
+        {% if user.code_ami_switch %}
+            <p>{{ user.code_ami_switch }}</p>
+            <p>Visibilité : {{ user.get_visibilite_code_ami_display }}</p>
+        {% else %}
+            <p>Non renseigné</p>
+        {% endif %}
+    </div>
+
+    <div class="detail-section">
+        <h2>📬 Propositions reçues sur mes annonces</h2>
+        {% if echanges_recus %}
+            {% for echange in echanges_recus %}
+            <div class="card">
+                <p>Annonce #{{ echange.annonce.pk }} —
+                proposée par {{ echange.user_demandeur.pseudo }}</p>
+                <p>Méthode : {{ echange.get_methode_utilisee_display }}</p>
+                <a href="{% url 'marketplace:detail_echange' echange.pk %}">
+                    Voir l'échange →
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune proposition reçue pour le moment.</p>
+        {% endif %}
+    </div>
+
+    <div class="detail-section">
+        <h2>📤 Mes propositions envoyées</h2>
+        {% if echanges_demandes %}
+            {% for echange in echanges_demandes %}
+            <div class="card">
+                <p>Annonce #{{ echange.annonce.pk }} de
+                {{ echange.annonce.user.pseudo }}</p>
+                <p>Méthode : {{ echange.get_methode_utilisee_display }}</p>
+                <a href="{% url 'marketplace:detail_echange' echange.pk %}">
+                    Voir l'échange →
+                </a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune proposition envoyée pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

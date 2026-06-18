@@ -32,4 +32,6 @@ urlpatterns = [
     path('mdp-reset/termine/', auth_views.PasswordResetCompleteView.as_view(
         template_name='accounts/mdp_reset_termine.html'
     ), name='mdp_reset_termine'),
+
+    path('profil/', views.profil, name='profil'),
 ]
