@@ -436,3 +436,40 @@ Aucun !
 
 ### Prochaines étapes
 - Tests unitaires Marketplace + sprint review (dernière carte Sprint 3)
+
+## Session 5 (suite) — Sprint 3 — Tests + Sprint Review
+
+### Ce qu'on a fait
+- 15 tests unitaires marketplace : modèle, vues, expiration, accès anonyme
+- 6 tests supplémentaires pokédex : vues liste, créer, détail
+- Corrigé clore_annonce : get_object_or_404 au lieu de get()
+- 40 tests passent, couverture 83% ✅
+
+### Problèmes rencontrés
+- test_clore_annonce_autre_user → DoesNotExist au lieu de 404
+  → Solution : get_object_or_404
+- flake8 : variables response inutilisées dans les tests
+
+### Sprint 3 — TERMINÉ 🎉
+
+## Sprint Review — Sprint 3
+
+### Ce qui a bien marché
+- Formulaire annonce complet avec autocomplete et talents dynamiques ✅
+- Filtres marketplace fonctionnels ✅
+- Page détail annonce ✅
+- Clôture manuelle + expiration automatique ✅
+- 40 tests, 83% couverture ✅
+
+### Ce qui a pris du temps
+- Genre en JSONField (migration bloquée par vieilles données)
+- dataset camelCase en JavaScript (noms_propose → nomsPropose)
+- Double div annonce-card dans le template
+
+### Métriques Sprint 3
+- Cartes complétées : 5/5 ✅
+- Tests : 40 tests, 83% couverture ✅
+- CI verte ✅
+
+### Prochaines étapes
+- Sprint 4 : Mise en relation (Echange model, Link Code, Code Ami, profil)
