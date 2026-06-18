@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Échange #{{ echange.pk }} — PokéMarket{% endblock %}
+{% block content %}
+<div class="container">
+    <a href="{% url 'marketplace:detail_annonce' echange.annonce.pk %}">← Retour à l'annonce</a>
+    <h1>🔗 Échange #{{ echange.pk }}</h1>
+    <p>👤 {{ echange.user_demandeur.pseudo }} — 📅 {{ echange.date_creation|date:"d/m/Y" }}</p>
+
+    <div class="detail-section">
+        <h2>📢 Annonce concernée</h2>
+        <p>Annonce #{{ echange.annonce.pk }} de {{ echange.annonce.user.pseudo }}</p>
+        <p>Pokémon cherché : n°{{ echange.annonce.pokemon_cherche_id }}</p>
+    </div>
+
+    <div class="detail-section">
+        <h2>⚙️ Méthode utilisée</h2>
+        <p>🔗 Link Code</p>
+    </div>
+
+    {% if echange.link_code %}
+    <div class="detail-section">
+        <h2>🎮 Ton Link Code</h2>
+        <p style="font-size: 2rem; text-align: center;"><strong>{{ echange.link_code }}</strong></p>
+        <p>Entre ce code dans le <strong>Poké Portail → Échange Lié</strong> dans le jeu.</p>
+        <p>⏳ Expire le {{ echange.link_code_expires_at|date:"d/m/Y à H:i" }}</p>
+    </div>
+    {% endif %}
+
+    <div class="detail-section">
+        <h2>📊 Statut</h2>
+        <p>{{ echange.get_statut_display }}</p>
+    </div>
+</div>
+{% endblock %}

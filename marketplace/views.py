@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
 from .forms import AnnonceForm
-from .models import Annonce
+from .models import Annonce, Echange, generer_link_code
 from pokedex.models import Jeu, PokemonCache
+from django.contrib import messages
 
 
 @login_required
@@ -37,10 +38,14 @@ def creer_annonce(request):
             ivs_propose = ivs_propose or None
 
             # Shiny cherché
-            shiny_cherche = True if form.cleaned_data['cherche_shiny'] else None
+            shiny_cherche = (
+                True if form.cleaned_data['cherche_shiny'] else None
+            )
 
             # Shiny proposé
-            shiny_propose = True if form.cleaned_data['propose_shiny'] else None
+            shiny_propose = (
+                True if form.cleaned_data['propose_shiny'] else None
+            )
 
             Annonce.objects.create(
                 user=request.user,
@@ -49,7 +54,9 @@ def creer_annonce(request):
                 cherche_shiny=shiny_cherche,
                 cherche_nature=form.cleaned_data['cherche_nature'] or None,
                 cherche_genre=form.cleaned_data['cherche_genre'] or None,
-                cherche_commentaire=form.cleaned_data['cherche_commentaire'] or None,
+                cherche_commentaire=(
+                    form.cleaned_data['cherche_commentaire'] or None
+                ),
                 cherche_ivs_min=ivs_cherche,
                 cherche_talents=talents_cherche,
                 propositions=[{
@@ -72,7 +79,9 @@ def creer_annonce(request):
 
 @login_required
 def liste_annonces(request):
-    annonces = Annonce.objects.filter(statut='ouverte').select_related('user', 'jeu')
+    annonces = Annonce.objects.filter(
+        statut='ouverte'
+    ).select_related('user', 'jeu')
 
     # Récupérer tous les IDs Pokémon présents dans les annonces
     ids = set()
@@ -148,7 +157,7 @@ def talents_pokemon(request):
 
 @login_required
 def detail_annonce(request, pk):
-    annonce = get_object_or_404(Annonce, pk=pk, user=request.user)
+    annonce = get_object_or_404(Annonce, pk=pk)
     ids = set()
     ids.add(annonce.pokemon_cherche_id)
     for p in annonce.propositions:
@@ -172,4 +181,57 @@ def clore_annonce(request, pk):
         return redirect('marketplace:liste_annonces')
     return render(request, 'marketplace/confirmer_cloture.html', {
         'annonce': annonce,
+    })
+
+
+@login_required
+def proposer_echange(request, annonce_id):
+    annonce = get_object_or_404(Annonce, pk=annonce_id, statut='ouverte')
+
+    # On ne peut pas proposer un échange sur sa propre annonce
+    if annonce.user == request.user:
+        messages.error(
+            request,
+            "Tu ne peux pas proposer un échange sur ta propre annonce."
+        )
+        return redirect('marketplace:detail_annonce', pk=annonce_id)
+
+    # Échange en attente déjà existant ?
+    echange_existant = Echange.objects.filter(
+        annonce=annonce,
+        user_demandeur=request.user,
+        statut='en_attente'
+    ).first()
+
+    if echange_existant:
+        return redirect('marketplace:detail_echange', pk=echange_existant.pk)
+
+    # Créer l'échange avec Link Code
+    link_code = generer_link_code()
+    echange = Echange.objects.create(
+        annonce=annonce,
+        user_demandeur=request.user,
+        methode_utilisee='link_code',
+        link_code=link_code,
+        link_code_expires_at=timezone.now() + timedelta(hours=24),
+        statut='en_attente'
+    )
+
+    return redirect('marketplace:detail_echange', pk=echange.pk)
+
+
+@login_required
+def detail_echange(request, pk):
+    echange = get_object_or_404(Echange, pk=pk)
+
+    # Seuls les deux joueurs concernés peuvent voir cette page
+    if (
+        request.user != echange.user_demandeur
+        and request.user != echange.annonce.user
+    ):
+        messages.error(request, "Tu n'as pas accès à cet échange.")
+        return redirect('marketplace:liste_annonces')
+
+    return render(request, 'marketplace/detail_echange.html', {
+        'echange': echange,
     })

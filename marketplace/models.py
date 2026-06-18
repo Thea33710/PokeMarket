@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from pokedex.models import Jeu
+import random
 
 
 class Annonce(models.Model):
@@ -48,7 +49,8 @@ class Annonce(models.Model):
     cherche_talent = models.CharField(max_length=10, null=True, blank=True)
     cherche_genre = models.JSONField(null=True, blank=True)
     cherche_commentaire = models.TextField(null=True, blank=True)
-    cherche_talents = models.JSONField(null=True, blank=True)  # ex: ['Engrais', 'Protéen']
+    cherche_talents = models.JSONField(null=True, blank=True)
+    # ex: ['Engrais', 'Protéen']
 
     # Ce que l'annonceur propose
     propositions = models.JSONField()
@@ -57,7 +59,9 @@ class Annonce(models.Model):
     methode_echange = models.CharField(max_length=15, choices=METHODE_CHOICES)
 
     # État de l'annonce
-    statut = models.CharField(max_length=15, choices=STATUT_CHOICES, default='ouverte')
+    statut = models.CharField(
+        max_length=15, choices=STATUT_CHOICES, default='ouverte'
+    )
 
     # Dates
     date_creation = models.DateTimeField(auto_now_add=True)
@@ -67,4 +71,57 @@ class Annonce(models.Model):
         ordering = ['-date_creation']
 
     def __str__(self):
-        return f"Annonce #{self.pk} — Pokémon {self.pokemon_cherche_id} par {self.user.pseudo}"
+        return (
+            f"Annonce #{self.pk} — "
+            f"Pokémon {self.pokemon_cherche_id} par {self.user.pseudo}"
+        )
+
+
+def generer_link_code():
+    """Génère un Link Code à 8 chiffres au format XXXX-XXXX."""
+    chiffres = random.randint(0, 99999999)
+    code = f"{chiffres:08d}"
+    return f"{code[:4]}-{code[4:]}"
+
+
+class Echange(models.Model):
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('confirme', 'Confirmé'),
+        ('annule', 'Annulé'),
+    ]
+
+    METHODE_CHOICES = [
+        ('link_code', 'Link Code'),
+        ('code_ami', 'Code Ami Switch'),
+    ]
+
+    annonce = models.ForeignKey(
+        Annonce,
+        on_delete=models.CASCADE,
+        related_name='echanges'
+    )
+    user_demandeur = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='echanges_demandes'
+    )
+    methode_utilisee = models.CharField(
+        max_length=15,
+        choices=METHODE_CHOICES
+    )
+    link_code = models.CharField(max_length=9, null=True, blank=True)
+    link_code_expires_at = models.DateTimeField(null=True, blank=True)
+    statut = models.CharField(
+        max_length=15,
+        choices=STATUT_CHOICES,
+        default='en_attente'
+    )
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f"Echange #{self.pk} — "
+            f"{self.user_demandeur} sur annonce #{self.annonce_id}"
+        )

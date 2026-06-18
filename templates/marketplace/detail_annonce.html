@@ -91,5 +91,10 @@
         🔒 Clore l'annonce
     </a>
     {% endif %}
+    {% if user.is_authenticated and annonce.user != user and annonce.statut == 'ouverte' %}
+        <a href="{% url 'marketplace:proposer_echange' annonce.pk %}">
+            🤝 Proposer un échange
+        </a>
+    {% endif %}
 </div>
 {% endblock %}
