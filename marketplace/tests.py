@@ -147,7 +147,7 @@ class AnnonceViewTest(TestCase):
 
     def test_creer_annonce_post(self):
         self.client.force_login(self.user)
-        response = self.client.post(reverse('marketplace:creer_annonce'), {
+        self.client.post(reverse('marketplace:creer_annonce'), {
             'pokemon_cherche_id': 906,
             'cherche_shiny': False,
             'cherche_genre': [],
@@ -161,7 +161,7 @@ class AnnonceViewTest(TestCase):
 
     def test_clore_annonce_proprietaire(self):
         self.client.force_login(self.user)
-        response = self.client.post(
+        self.client.post(
             reverse('marketplace:clore_annonce', args=[self.annonce.pk])
         )
         self.annonce.refresh_from_db()

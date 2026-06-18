@@ -215,7 +215,7 @@ class TestVuesPokedex(TestCase):
 
     def test_creer_pokedex_post(self):
         self.client.force_login(self.user)
-        response = self.client.post(reverse('pokedex:creer'), {
+        self.client.post(reverse('pokedex:creer'), {
             'nom': 'Nouveau Pokédex',
             'jeu': self.jeu.pk,
             'type_vue': 'regional',
