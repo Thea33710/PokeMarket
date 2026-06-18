@@ -162,6 +162,7 @@ def detail_annonce(request, pk):
         'cache': cache,
     })
 
+
 @login_required
 def clore_annonce(request, pk):
     annonce = Annonce.objects.get(pk=pk, user=request.user)
