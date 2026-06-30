@@ -49,3 +49,8 @@ def tableau_de_bord(request):
         'annonces_actives': annonces_actives,
         'propositions_attente': propositions_attente,
     })
+
+
+def codes_communautaires(request):
+    """Page statique des codes communautaires Écarlate & Violet."""
+    return render(request, 'core/codes_communautaires.html')
