@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de bord — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 style="color: #4a1472;">👋 Salut {{ user.pseudo }} !</h1>
+</div>
+
+<div class="card">
+    <h2 style="color: #4a1472;">📖 Mes Pokédex</h2>
+    {% if pokedex_progression %}
+        {% for item in pokedex_progression %}
+        <div class="progression-bar-container">
+            <div class="progression-label">
+                {{ item.pokedex.nom }} — {{ item.captures }}/{{ item.total }} capturés
+            </div>
+            <div class="progression-bar">
+                <div class="progression-fill"
+                     style="width: {% widthratio item.captures item.total 100 %}%;"></div>
+            </div>
+            <a href="{% url 'pokedex:detail' item.pokedex.pk %}" class="btn-secondary"
+               style="margin-top: 0.5rem; display: inline-block;">
+                Voir →
+            </a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucun Pokédex pour le moment.</p>
+        <a href="{% url 'pokedex:creer' %}" class="btn">+ Créer un Pokédex</a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2 style="color: #4a1472;">🏪 Mes annonces actives</h2>
+    {% if annonces_actives %}
+        {% for annonce in annonces_actives %}
+        <p>
+            Annonce #{{ annonce.pk }} —
+            <a href="{% url 'marketplace:detail_annonce' annonce.pk %}">Voir →</a>
+        </p>
+        {% endfor %}
+    {% else %}
+        <p>Aucune annonce active.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2 style="color: #4a1472;">📬 Propositions reçues en attente</h2>
+    {% if propositions_attente %}
+        {% for echange in propositions_attente %}
+        <p>
+            Annonce #{{ echange.annonce.pk }} —
+            proposée par {{ echange.user_demandeur.pseudo }} —
+            <a href="{% url 'marketplace:detail_echange' echange.pk %}">Voir →</a>
+        </p>
+        {% endfor %}
+    {% else %}
+        <p>Aucune proposition en attente.</p>
+    {% endif %}
+</div>
+{% endblock %}

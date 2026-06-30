@@ -127,6 +127,7 @@ def liste_annonces(request):
     })
 
 
+@login_required
 def autocomplete_pokemon(request):
     query = request.GET.get('q', '').strip()
     resultats = []
@@ -139,6 +140,7 @@ def autocomplete_pokemon(request):
     })
 
 
+@login_required
 def talents_pokemon(request):
     pokemon_id = request.GET.get('pokemon_id')
     cible = request.GET.get('cible', 'cherche')
