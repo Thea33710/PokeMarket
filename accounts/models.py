@@ -7,6 +7,7 @@ class User(AbstractUser):
 
     pseudo = models.CharField(max_length=80, unique=True)
     pokemon_avatar_id = models.IntegerField(null=True, blank=True)
+    avatar_couleur = models.CharField(max_length=7, default='#7030a0')
     code_ami_switch = models.CharField(max_length=15, null=True, blank=True)
 
     VISIBILITE_CHOICES = [

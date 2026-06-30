@@ -4,10 +4,23 @@
 
 {% block content %}
 <div class="container">
+    <div style="width: 80px; height: 80px; border-radius: 50%;
+                background: {{ user.avatar_couleur }};
+                border: 3px solid #212121;
+                display: flex; align-items: center; justify-content: center;
+                margin: 0 auto 1rem;">
+        {% if user.pokemon_avatar_id %}
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ user.pokemon_avatar_id }}.png"
+                 alt="avatar" width="60">
+        {% else %}
+            <span style="font-size: 2rem;">❓</span>
+        {% endif %}
+    </div>
     <h1>👤 Mon profil</h1>
     <p>Pseudo : {{ user.pseudo }}</p>
     <p>Email : {{ user.email }}</p>
     <p>🔄 Échanges effectués : {{ user.nb_echanges }}</p>
+    <a href="{% url 'auth:changer_avatar' %}" class="btn">🎨 Changer mon avatar</a>
 
     <div class="detail-section">
         <h2>🔑 Code Ami Switch</h2>

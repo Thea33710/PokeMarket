@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from pokedex.models import PokemonCache
 from marketplace.models import Echange
 from .forms import InscriptionForm
 from .models import User
@@ -24,7 +25,7 @@ def inscription(request):
             return redirect('auth:connexion')
     else:
         form = InscriptionForm()
-    return render(request, 'accounts/inscription.html', {'form': form})
+    return render(request, 'auth/inscription.html', {'form': form})
 
 
 def envoyer_email_confirmation(request, user):
@@ -75,7 +76,7 @@ def connexion(request):
             messages.error(request, "Email ou mot de passe incorrect 😕")
     else:
         form = AuthenticationForm()
-    return render(request, 'accounts/connexion.html', {'form': form})
+    return render(request, 'auth/connexion.html', {'form': form})
 
 
 def deconnexion(request):
@@ -102,4 +103,32 @@ def profil(request):
     return render(request, 'accounts/profil.html', {
         'echanges_demandes': echanges_demandes,
         'echanges_recus': echanges_recus,
+    })
+
+
+@login_required
+def changer_avatar(request):
+    """Page de changement d'avatar."""
+    couleurs = [
+        '#7030a0', '#4a1472', '#e91e63', '#f44336',
+        '#ff9800', '#4caf50', '#2196f3', '#009688',
+    ]
+
+    if request.method == 'POST':
+        pokemon_id = request.POST.get('pokemon_avatar_id')
+        couleur = request.POST.get('avatar_couleur')
+
+        if pokemon_id and PokemonCache.objects.filter(
+            pokemon_id=pokemon_id
+        ).exists():
+            request.user.pokemon_avatar_id = pokemon_id
+        if couleur in couleurs:
+            request.user.avatar_couleur = couleur
+        request.user.save()
+
+        messages.success(request, "Avatar mis à jour ! 🎉")
+        return redirect('auth:profil')
+
+    return render(request, 'accounts/changer_avatar.html', {
+        'couleurs': couleurs,
     })

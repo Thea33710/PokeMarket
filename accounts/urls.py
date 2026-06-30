@@ -34,4 +34,5 @@ urlpatterns = [
     ), name='mdp_reset_termine'),
 
     path('profil/', views.profil, name='profil'),
+    path('avatar/', views.changer_avatar, name='changer_avatar'),
 ]
