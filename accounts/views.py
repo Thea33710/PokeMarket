@@ -27,7 +27,7 @@ def inscription(request):
             return redirect('auth:connexion')
     else:
         form = InscriptionForm()
-    return render(request, 'auth/inscription.html', {'form': form})
+    return render(request, 'accounts/inscription.html', {'form': form})
 
 
 def envoyer_email_confirmation(request, user):
@@ -78,7 +78,7 @@ def connexion(request):
             messages.error(request, "Email ou mot de passe incorrect 😕")
     else:
         form = AuthenticationForm()
-    return render(request, 'auth/connexion.html', {'form': form})
+    return render(request, 'accounts/connexion.html', {'form': form})
 
 
 def deconnexion(request):
