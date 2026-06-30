@@ -120,4 +120,24 @@ bandeau conditionnel dans `base.html` ou dans les templates marketplace.
 
 ---
 
+## 🔐 Modification email / mot de passe depuis le profil
+
+**Idée :** Permettre à l'utilisateur connecté de changer son email ou son
+mot de passe directement depuis la page profil, sans passer par le flow
+"mot de passe oublié".
+
+**Complexité :** Faible — formulaire dédié + vérification mot de passe actuel
+
+---
+
+## 🎮 Élargir le cache PokéAPI pour plus de choix d'avatar
+
+**Idée :** Une fois Épée/Bouclier et BDSP ajoutés (Phase 2), élargir le
+cache PokéAPI pour permettre le choix d'avatar parmi tous les Pokémon
+de ces jeux, pas seulement Paldea.
+
+**Complexité :** Faible — réutilise les commandes seed existantes
+
+---
+
 *(à compléter au fil du développement)*

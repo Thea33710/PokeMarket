@@ -504,3 +504,57 @@ Aucun !
 - Affichage Code Ami Switch + visibilité
 - Boutons Pokédex / Marketplace / Profil ajoutés dans la nav
 - Confirmation bilatérale débloquée (annonceur peut maintenant accéder à ses échanges)
+
+## Session 6 — Sprint 4 — @login_required marketplace + accueil + tableau de bord
+
+### Ce qu'on a fait
+- Ajouté @login_required sur autocomplete_pokemon et talents_pokemon (conformité MVP : marketplace 100% connecté)
+- Séparé accueil.html (public, non connecté) du tableau de bord (connecté)
+- Créé l'app core avec vue tableau_de_bord : Pokédex avec progression, annonces actives, propositions reçues
+- Lien "Tableau de bord" dans la nav
+
+### Problèmes rencontrés
+- Base de données de la tour pas migrée après le pull (relation does not exist)
+  → Solution : python manage.py migrate
+
+### État actuel
+- Accueil public + tableau de bord séparés et fonctionnels ✅
+
+## Session 6 (suite) — Sprint 4 — Avatar Pokémon + jeux possédés + page profil unifiée
+
+### Ce qu'on a fait
+- Ajouté avatar_couleur (CharField) sur le modèle User
+- Ajouté jeux_possedes (ManyToManyField vers Jeu) sur le modèle User
+- Réutilisé l'autocomplete HTMX existant pour la sélection du Pokémon avatar
+- Palette de 8 couleurs prédéfinies pour le fond de l'avatar
+- Fusionné la page profil en une seule vue avec mode lecture/édition (?edit=1)
+  pour respecter le MVP (une seule page "Mon Profil" avec avatar, Code Ami, jeux possédés)
+- Formulaire unique : avatar, Code Ami Switch + visibilité, jeux possédés
+
+### Problèmes rencontrés
+- Module requests manquant sur la tour → pip install requests
+- Cache PokemonCache vide sur la tour (0 Pokémon) → relancé seed_sv + cache_pokeapi
+- Erreur namespace 'accounts' is not a registered namespace
+  → Le namespace réel est 'auth' (cohérent avec /auth/), corrigé tous les {% url %}
+- Erreur NoReverseMatch sur render() → confusion entre namespace URL (auth)
+  et chemin réel des templates (accounts/) → corrigé les chemins render()
+- Format Document de VS Code casse la syntaxe Django dans les attributs style
+  → éviter le formatage auto sur les fichiers .html Django
+- TemplateSyntaxError 'endif' inattendu → tag {% if %} coupé sur plusieurs lignes
+  par le formateur → corrigé en une seule ligne
+
+### État actuel
+- Page profil complète et fonctionnelle (lecture + édition) ✅
+
+## Session 6 (suite) — Sprint 4 — Page codes communautaires (US-14)
+
+### Ce qu'on a fait
+- Page statique core/codes_communautaires.html, accès public
+- 3 catégories : exclusivités de version, évolutions par échange avec objet,
+  évolutions par échange sans objet (simplifié par rapport à la liste complète AustinJohnPlays)
+- Lien "Codes" ajouté dans la nav (connecté et non connecté)
+
+### Problèmes rencontrés
+- flake8 : ligne url() trop longue → découpée sur plusieurs lignes
+
+### Sprint 4 — Tâche "Profil utilisateur (US-12, US-15)" TERMINÉE 🎉
