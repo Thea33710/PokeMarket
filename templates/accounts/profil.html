@@ -16,21 +16,126 @@
             <span style="font-size: 2rem;">❓</span>
         {% endif %}
     </div>
-    <h1>👤 Mon profil</h1>
-    <p>Pseudo : {{ user.pseudo }}</p>
-    <p>Email : {{ user.email }}</p>
-    <p>🔄 Échanges effectués : {{ user.nb_echanges }}</p>
-    <a href="{% url 'auth:changer_avatar' %}" class="btn">🎨 Changer mon avatar</a>
+    <h1 style="text-align: center;">👤 {{ user.pseudo }}</h1>
+    <p style="text-align: center;">Email : {{ user.email }}</p>
+    <p style="text-align: center;">🔄 Échanges effectués : {{ user.nb_echanges }}</p>
+
+{% if mode_edition %}
+<form method="post">
+    {% csrf_token %}
+
+    <div class="detail-section">
+        <h2>🎨 Avatar</h2>
+        <div class="form-group autocomplete-wrapper">
+            <label for="avatar-search">Choisis ton Pokémon</label>
+            <input type="text"
+                   id="avatar-search"
+                   name="q"
+                   placeholder="Tape un nom... ex: Poussacha"
+                   autocomplete="off"
+                   hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#avatar-resultats">
+            <div id="avatar-resultats" class="autocomplete-resultats"></div>
+            <input type="hidden" name="pokemon_avatar_id" id="id_pokemon_avatar_id"
+                   value="{{ user.pokemon_avatar_id|default:'' }}">
+        </div>
+
+        <div id="avatar-choix" class="pokemon-choisi"
+             style="{% if not user.pokemon_avatar_id %}display:none{% endif %}">
+            ✅ Pokémon sélectionné : <strong id="avatar-nom-affiche"></strong>
+            <button type="button" onclick="effacerChoixAvatar()">✏️</button>
+        </div>
+
+        <div class="form-group">
+            <label>Couleur de fond</label>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                {% for couleur in couleurs %}
+                <label style="cursor: pointer;">
+                    <input type="radio" name="avatar_couleur" value="{{ couleur }}"
+                           {% if user.avatar_couleur == couleur %}checked{% endif %}
+                           style="display: none;">
+                    <span style="display: inline-block; width: 40px; height: 40px;
+                                  border-radius: 50%; background: {{ couleur }};
+                                  border: 2px solid #212121;"></span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
     <div class="detail-section">
         <h2>🔑 Code Ami Switch</h2>
-        {% if user.code_ami_switch %}
-            <p>{{ user.code_ami_switch }}</p>
-            <p>Visibilité : {{ user.get_visibilite_code_ami_display }}</p>
-        {% else %}
-            <p>Non renseigné</p>
-        {% endif %}
+        <div class="form-group">
+            <label for="code_ami_switch">Ton code (optionnel)</label>
+            <input type="text" name="code_ami_switch" id="code_ami_switch"
+                   placeholder="1234-5678-9012"
+                   value="{{ user.code_ami_switch|default:'' }}">
+        </div>
+        <div class="form-group">
+            <label for="visibilite_code_ami">Visibilité</label>
+            <select name="visibilite_code_ami" id="visibilite_code_ami">
+                <option value="prive" {% if user.visibilite_code_ami == 'prive' %}selected{% endif %}>
+                    Privé
+                </option>
+                <option value="public" {% if user.visibilite_code_ami == 'public' %}selected{% endif %}>
+                    Public
+                </option>
+                <option value="non_renseigne" {% if user.visibilite_code_ami == 'non_renseigne' %}selected{% endif %}>
+                    Non renseigné
+                </option>
+            </select>
+        </div>
     </div>
+
+    <div class="detail-section">
+        <h2>🎮 Jeux possédés</h2>
+        {% for jeu in jeux %}
+        <label style="display: block; margin-bottom: 0.3rem;">
+            <input type="checkbox" name="jeux_possedes" value="{{ jeu.pk }}"
+                   {% if jeu in user.jeux_possedes.all %}checked{% endif %}>
+            {{ jeu.nom }}
+        </label>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn">💾 Enregistrer</button>
+    <a href="{% url 'auth:profil' %}" class="btn-secondary">Annuler</a>
+</form>
+
+{% else %}
+
+<div class="detail-section">
+    <h2>🎨 Avatar</h2>
+    <p>{% if user.pokemon_avatar_id %}Pokémon #{{ user.pokemon_avatar_id }}{% else %}Aucun{% endif %}</p>
+</div>
+
+<div class="detail-section">
+    <h2>🔑 Code Ami Switch</h2>
+    {% if user.code_ami_switch %}
+        <p>{{ user.code_ami_switch }}</p>
+        <p>Visibilité : {{ user.get_visibilite_code_ami_display }}</p>
+    {% else %}
+        <p>Non renseigné</p>
+    {% endif %}
+</div>
+
+<div class="detail-section">
+    <h2>🎮 Jeux possédés</h2>
+    {% if user.jeux_possedes.all %}
+        <ul>
+        {% for jeu in user.jeux_possedes.all %}
+            <li>{{ jeu.nom }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun jeu renseigné</p>
+    {% endif %}
+</div>
+
+<a href="?edit=1" class="btn">✏️ Modifier mon profil</a>
+
+{% endif %}
 
     <div class="detail-section">
         <h2>📬 Propositions reçues sur mes annonces</h2>
@@ -68,4 +173,29 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+function choisirPokemon(id, nom, element) {
+    const resultats = element.closest('.autocomplete-resultats');
+    const cible = resultats.id.replace('-resultats', '');
+
+    if (cible === 'avatar') {
+        document.getElementById('id_pokemon_avatar_id').value = id;
+    }
+
+    document.getElementById(cible + '-nom-affiche').textContent = '#' + id + ' — ' + nom;
+    document.getElementById(cible + '-search').value = '';
+    resultats.innerHTML = '';
+
+    document.getElementById(cible + '-choix').style.display = 'block';
+    document.getElementById(cible + '-search').style.display = 'none';
+}
+
+function effacerChoixAvatar() {
+    document.getElementById('id_pokemon_avatar_id').value = '';
+    document.getElementById('avatar-choix').style.display = 'none';
+    document.getElementById('avatar-search').style.display = 'block';
+    document.getElementById('avatar-search').focus();
+}
+</script>
 {% endblock %}

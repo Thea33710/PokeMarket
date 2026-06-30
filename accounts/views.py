@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from pokedex.models import PokemonCache
+from pokedex.models import PokemonCache, Jeu
 from marketplace.models import Echange
 from .forms import InscriptionForm
 from .models import User
@@ -19,9 +19,11 @@ def inscription(request):
         form = InscriptionForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Envoyer l'email de confirmation
             envoyer_email_confirmation(request, user)
-            messages.success(request, "Compte créé ! Vérifie tes emails pour activer ton compte 📧")
+            messages.success(
+                request,
+                "Compte créé ! Vérifie tes emails pour activer ton compte 📧"
+            )
             return redirect('auth:connexion')
     else:
         form = InscriptionForm()
@@ -87,28 +89,7 @@ def deconnexion(request):
 
 @login_required
 def profil(request):
-    """Page profil utilisateur."""
-    # Échanges en cours où l'utilisateur est demandeur
-    echanges_demandes = Echange.objects.filter(
-        user_demandeur=request.user,
-        statut='en_attente'
-    ).select_related('annonce', 'annonce__user')
-
-    # Échanges en cours sur les annonces de l'utilisateur
-    echanges_recus = Echange.objects.filter(
-        annonce__user=request.user,
-        statut='en_attente'
-    ).select_related('annonce', 'user_demandeur')
-
-    return render(request, 'accounts/profil.html', {
-        'echanges_demandes': echanges_demandes,
-        'echanges_recus': echanges_recus,
-    })
-
-
-@login_required
-def changer_avatar(request):
-    """Page de changement d'avatar."""
+    """Page profil utilisateur — affichage et modification."""
     couleurs = [
         '#7030a0', '#4a1472', '#e91e63', '#f44336',
         '#ff9800', '#4caf50', '#2196f3', '#009688',
@@ -117,6 +98,9 @@ def changer_avatar(request):
     if request.method == 'POST':
         pokemon_id = request.POST.get('pokemon_avatar_id')
         couleur = request.POST.get('avatar_couleur')
+        code_ami = request.POST.get('code_ami_switch', '').strip()
+        visibilite = request.POST.get('visibilite_code_ami')
+        jeux_ids = request.POST.getlist('jeux_possedes')
 
         if pokemon_id and PokemonCache.objects.filter(
             pokemon_id=pokemon_id
@@ -124,11 +108,31 @@ def changer_avatar(request):
             request.user.pokemon_avatar_id = pokemon_id
         if couleur in couleurs:
             request.user.avatar_couleur = couleur
-        request.user.save()
 
-        messages.success(request, "Avatar mis à jour ! 🎉")
+        request.user.code_ami_switch = code_ami or None
+        if visibilite in ('public', 'prive', 'non_renseigne'):
+            request.user.visibilite_code_ami = visibilite
+
+        request.user.save()
+        request.user.jeux_possedes.set(jeux_ids)
+
+        messages.success(request, "Profil mis à jour ! 🎉")
         return redirect('auth:profil')
 
-    return render(request, 'accounts/changer_avatar.html', {
+    echanges_demandes = Echange.objects.filter(
+        user_demandeur=request.user,
+        statut='en_attente'
+    ).select_related('annonce', 'annonce__user')
+
+    echanges_recus = Echange.objects.filter(
+        annonce__user=request.user,
+        statut='en_attente'
+    ).select_related('annonce', 'user_demandeur')
+
+    return render(request, 'accounts/profil.html', {
+        'echanges_demandes': echanges_demandes,
+        'echanges_recus': echanges_recus,
         'couleurs': couleurs,
+        'jeux': Jeu.objects.all(),
+        'mode_edition': request.GET.get('edit') == '1',
     })

@@ -32,7 +32,9 @@ class InscriptionForm(forms.ModelForm):
         password2 = cleaned_data.get('password2')
 
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Les mots de passe ne correspondent pas.")
+            raise forms.ValidationError(
+                "Les mots de passe ne correspondent pas."
+            )
         return cleaned_data
 
     def save(self, commit=True):
