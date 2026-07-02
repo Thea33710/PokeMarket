@@ -6,7 +6,8 @@
 <div class="container">
     {% if user.is_authenticated and not user.code_ami_switch %}
     <div class="bandeau-info">
-        💡 Tu n'as pas renseigné ton Code Ami Switch. Les échanges par Code Ami ne seront pas disponibles pour tes annonces.
+        💡 Tu n'as pas renseigné ton Code Ami Switch. Les échanges par Code Ami ne seront pas disponibles pour tes
+        annonces.
     </div>
     {% endif %}
     <h1>📢 Créer une annonce</h1>
@@ -21,14 +22,9 @@
 
         <div class="form-group autocomplete-wrapper">
             <label for="cherche-search">Nom du Pokémon recherché</label>
-            <input type="text"
-                   id="cherche-search"
-                   name="q"
-                   placeholder="Tape un nom... ex: Poussacha"
-                   autocomplete="off"
-                   hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
-                   hx-trigger="keyup changed delay:300ms"
-                   hx-target="#cherche-resultats">
+            <input type="text" id="cherche-search" name="q" placeholder="Tape un nom... ex: Poussacha"
+                autocomplete="off" hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
+                hx-trigger="keyup changed delay:300ms" hx-target="#cherche-resultats">
             <div id="cherche-resultats" class="autocomplete-resultats"></div>
         </div>
 
@@ -47,46 +43,41 @@
             {{ form.cherche_genre }}
         </div>
 
-        <h3>Optionnels</h3>
-        <div class="form-group">
-            {{ form.cherche_nature.label_tag }}
-            {{ form.cherche_nature }}
-        </div>
-
-        <div class="form-group">
-            <label>Talents souhaités</label>
-            <div id="cherche-talents" class="talents-liste">
-                <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+        <details>
+            <summary>
+                <h3>Optionnels</h3>
+            </summary>
+            <div class="form-group">
+                {{ form.cherche_nature.label_tag }}
+                {{ form.cherche_nature }}
             </div>
-        </div>
-
-        <div class="form-group">
-            {{ form.cherche_commentaire.label_tag }}
-            {{ form.cherche_commentaire }}
-        </div>
-
-        <h3>IVs minimum souhaités (optionnel)</h3>
-        <div class="ivs-grid">
-            <div class="form-group">{{ form.iv_pv.label_tag }}{{ form.iv_pv }}</div>
-            <div class="form-group">{{ form.iv_atk.label_tag }}{{ form.iv_atk }}</div>
-            <div class="form-group">{{ form.iv_def.label_tag }}{{ form.iv_def }}</div>
-            <div class="form-group">{{ form.iv_spa.label_tag }}{{ form.iv_spa }}</div>
-            <div class="form-group">{{ form.iv_spd.label_tag }}{{ form.iv_spd }}</div>
-            <div class="form-group">{{ form.iv_spe.label_tag }}{{ form.iv_spe }}</div>
-        </div>
+            <div class="form-group">
+                <label>Talents souhaités</label>
+                <div id="cherche-talents" class="talents-liste">
+                    <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.cherche_commentaire.label_tag }}
+                {{ form.cherche_commentaire }}
+            </div>
+            <div class="ivs-grid">
+                <div class="form-group">{{ form.iv_pv.label_tag }}{{ form.iv_pv }}</div>
+                <div class="form-group">{{ form.iv_atk.label_tag }}{{ form.iv_atk }}</div>
+                <div class="form-group">{{ form.iv_def.label_tag }}{{ form.iv_def }}</div>
+                <div class="form-group">{{ form.iv_spa.label_tag }}{{ form.iv_spa }}</div>
+                <div class="form-group">{{ form.iv_spd.label_tag }}{{ form.iv_spd }}</div>
+                <div class="form-group">{{ form.iv_spe.label_tag }}{{ form.iv_spe }}</div>
+            </div>
+        </details>
 
         <h2>🎁 Pokémon proposé</h2>
 
         <div class="form-group autocomplete-wrapper">
             <label for="propose-search">Nom du Pokémon proposé</label>
-            <input type="text"
-                   id="propose-search"
-                   name="q"
-                   placeholder="Tape un nom... ex: Aquali"
-                   autocomplete="off"
-                   hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
-                   hx-trigger="keyup changed delay:300ms"
-                   hx-target="#propose-resultats">
+            <input type="text" id="propose-search" name="q" placeholder="Tape un nom... ex: Aquali" autocomplete="off"
+                hx-get="{% url 'marketplace:autocomplete_pokemon' %}" hx-trigger="keyup changed delay:300ms"
+                hx-target="#propose-resultats">
             <div id="propose-resultats" class="autocomplete-resultats"></div>
         </div>
 
@@ -105,28 +96,29 @@
             {{ form.propose_genre }}
         </div>
 
-        <h3>Optionnels</h3>
-        <div class="form-group">
-            {{ form.propose_nature.label_tag }}
-            {{ form.propose_nature }}
-        </div>
-
-        <div class="form-group">
-            <label>Talents du Pokémon proposé</label>
-            <div id="propose-talents" class="talents-liste">
-                <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+        <details>
+            <summary>
+                <h3>Optionnels</h3>
+            </summary>
+            <div class="form-group">
+                {{ form.propose_nature.label_tag }}
+                {{ form.propose_nature }}
             </div>
-        </div>
-
-        <h3>IVs du Pokémon proposé (optionnel)</h3>
-        <div class="ivs-grid">
-            <div class="form-group">{{ form.propose_iv_pv.label_tag }}{{ form.propose_iv_pv }}</div>
-            <div class="form-group">{{ form.propose_iv_atk.label_tag }}{{ form.propose_iv_atk }}</div>
-            <div class="form-group">{{ form.propose_iv_def.label_tag }}{{ form.propose_iv_def }}</div>
-            <div class="form-group">{{ form.propose_iv_spa.label_tag }}{{ form.propose_iv_spa }}</div>
-            <div class="form-group">{{ form.propose_iv_spd.label_tag }}{{ form.propose_iv_spd }}</div>
-            <div class="form-group">{{ form.propose_iv_spe.label_tag }}{{ form.propose_iv_spe }}</div>
-        </div>
+            <div class="form-group">
+                <label>Talents du Pokémon proposé</label>
+                <div id="propose-talents" class="talents-liste">
+                    <p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>
+                </div>
+            </div>
+            <div class="ivs-grid">
+                <div class="form-group">{{ form.propose_iv_pv.label_tag }}{{ form.propose_iv_pv }}</div>
+                <div class="form-group">{{ form.propose_iv_atk.label_tag }}{{ form.propose_iv_atk }}</div>
+                <div class="form-group">{{ form.propose_iv_def.label_tag }}{{ form.propose_iv_def }}</div>
+                <div class="form-group">{{ form.propose_iv_spa.label_tag }}{{ form.propose_iv_spa }}</div>
+                <div class="form-group">{{ form.propose_iv_spd.label_tag }}{{ form.propose_iv_spd }}</div>
+                <div class="form-group">{{ form.propose_iv_spe.label_tag }}{{ form.propose_iv_spe }}</div>
+            </div>
+        </details>
 
         <h2>⚙️ Paramètres</h2>
         <div class="form-group">
@@ -145,41 +137,41 @@
 </div>
 
 <script>
-function choisirPokemon(id, nom, element) {
-    const resultats = element.closest('.autocomplete-resultats');
-    const cible = resultats.id.replace('-resultats', '');
+    function choisirPokemon(id, nom, element) {
+        const resultats = element.closest('.autocomplete-resultats');
+        const cible = resultats.id.replace('-resultats', '');
 
-    if (cible === 'cherche') {
-        document.getElementById('id_pokemon_cherche_id').value = id;
-    } else {
-        document.getElementById('id_pokemon_propose_id').value = id;
+        if (cible === 'cherche') {
+            document.getElementById('id_pokemon_cherche_id').value = id;
+        } else {
+            document.getElementById('id_pokemon_propose_id').value = id;
+        }
+
+        document.getElementById(cible + '-nom-affiche').textContent = '#' + id + ' — ' + nom;
+        document.getElementById(cible + '-search').value = '';
+        resultats.innerHTML = '';
+
+        document.getElementById(cible + '-choix').style.display = 'block';
+        document.getElementById(cible + '-search').style.display = 'none';
+
+        // Charger les talents via HTMX
+        htmx.ajax('GET', '/marketplace/talents/?pokemon_id=' + id + '&cible=' + cible, {
+            target: '#' + cible + '-talents',
+            swap: 'innerHTML'
+        });
     }
 
-    document.getElementById(cible + '-nom-affiche').textContent = '#' + id + ' — ' + nom;
-    document.getElementById(cible + '-search').value = '';
-    resultats.innerHTML = '';
-
-    document.getElementById(cible + '-choix').style.display = 'block';
-    document.getElementById(cible + '-search').style.display = 'none';
-
-    // Charger les talents via HTMX
-    htmx.ajax('GET', '/marketplace/talents/?pokemon_id=' + id + '&cible=' + cible, {
-        target: '#' + cible + '-talents',
-        swap: 'innerHTML'
-    });
-}
-
-function effacerChoix(cible) {
-    if (cible === 'cherche') {
-        document.getElementById('id_pokemon_cherche_id').value = '';
-    } else {
-        document.getElementById('id_pokemon_propose_id').value = '';
+    function effacerChoix(cible) {
+        if (cible === 'cherche') {
+            document.getElementById('id_pokemon_cherche_id').value = '';
+        } else {
+            document.getElementById('id_pokemon_propose_id').value = '';
+        }
+        document.getElementById(cible + '-choix').style.display = 'none';
+        document.getElementById(cible + '-search').style.display = 'block';
+        document.getElementById(cible + '-search').focus();
+        document.getElementById(cible + '-talents').innerHTML =
+            '<p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>';
     }
-    document.getElementById(cible + '-choix').style.display = 'none';
-    document.getElementById(cible + '-search').style.display = 'block';
-    document.getElementById(cible + '-search').focus();
-    document.getElementById(cible + '-talents').innerHTML =
-        '<p class="talent-vide">Sélectionne un Pokémon pour voir ses talents</p>';
-}
 </script>
 {% endblock %}
