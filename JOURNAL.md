@@ -558,3 +558,34 @@ Aucun !
 - flake8 : ligne url() trop longue → découpée sur plusieurs lignes
 
 ### Sprint 4 — Tâche "Profil utilisateur (US-12, US-15)" TERMINÉE 🎉
+
+## Session 7 — Sprint 4 — Passage CSS + corrections fonctionnelles
+
+### Suppression Pokédex
+- Vue `supprimer_pokedex` dans `pokedex/views.py`
+- Template `confirmer_suppression.html`
+- Bouton "Supprimer" sur la liste Pokédex
+- Endpoint `DELETE /pokedex/{id}/` conforme au MVP Stage 3
+
+### Menu déroulant optionnels — création annonce
+- Balise `<details>` HTML native pour les champs optionnels
+- Deux sections collapsibles : précisions cherché + précisions proposé
+
+### Refonte CSS globale (base.html)
+- Nouvelles variables couleurs + fond lavande doux
+- Header sticky + ombre portée
+- Cards avec border-radius 16px et shadow subtile
+- Boutons avec hover transform
+- Formulaires avec labels en uppercase + focus violet
+- Bandeau info jaune doux
+- Classes `.detail-section`, `.btn-danger`, `.pokedex-card-link`
+- Responsive mobile amélioré
+
+### Pages corrigées
+- **Marketplace liste** : cartes en flex colonne, séparateur ⇄, footer avec meta + bouton
+- **Détail annonce** : sprite + nom en ligne, badges pour les précisions
+- **Création annonce** : checkboxes alignées, sections optionnelles collapsibles, séparateur entre cherché/proposé
+- **Tableau de bord** : mise en page deux colonnes (Pokédex / Annonces + Propositions), sprites Pokémon, avatar utilisateur
+- **Profil** : carte avatar + infos en haut, Code Ami + Jeux en deux colonnes, sprites dans les échanges
+- **Liste Pokédex** : cartes propres sans doublon, bouton supprimer rouge discret
+- **Accueil public** : mise en page deux colonnes hero + emoji, trois cartes fonctionnalités
