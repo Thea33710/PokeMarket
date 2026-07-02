@@ -1,62 +1,116 @@
 {% extends 'base.html' %}
+{% load marketplace_extras %}
 
 {% block title %}Tableau de bord — PokéMarket{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1 style="color: #4a1472;">👋 Salut {{ user.pseudo }} !</h1>
+<div class="card" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+    {% if user.pokemon_avatar_id %}
+    <div style="width: 56px; height: 56px; border-radius: 50%;
+                background: {{ user.avatar_couleur }};
+                border: 3px solid #212121; flex-shrink: 0;
+                display: flex; align-items: center; justify-content: center;">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ user.pokemon_avatar_id }}.png"
+             width="44" alt="avatar">
+    </div>
+    {% endif %}
+    <div>
+        <h1 style="color: var(--violet-fonce); font-size: 1.4rem;">👋 Salut {{ user.pseudo }} !</h1>
+        <p style="color: var(--texte-leger); font-size: 0.88rem;">🔄 {{ user.nb_echanges }} échange(s) réussi(s)</p>
+    </div>
 </div>
 
-<div class="card">
-    <h2 style="color: #4a1472;">📖 Mes Pokédex</h2>
-    {% if pokedex_progression %}
-        {% for item in pokedex_progression %}
-        <div class="progression-bar-container">
-            <div class="progression-label">
-                {{ item.pokedex.nom }} — {{ item.captures }}/{{ item.total }} capturés
-            </div>
-            <div class="progression-bar">
-                <div class="progression-fill"
-                     style="width: {% widthratio item.captures item.total 100 %}%;"></div>
-            </div>
-            <a href="{% url 'pokedex:detail' item.pokedex.pk %}" class="btn-secondary"
-               style="margin-top: 0.5rem; display: inline-block;">
-                Voir →
-            </a>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="color: var(--violet-fonce);">📖 Mes Pokédex</h2>
+            <a href="{% url 'pokedex:creer' %}" class="btn" style="font-size: 0.85rem; padding: 0.5rem 1rem;">+ Nouveau</a>
         </div>
-        {% endfor %}
-    {% else %}
-        <p>Aucun Pokédex pour le moment.</p>
-        <a href="{% url 'pokedex:creer' %}" class="btn">+ Créer un Pokédex</a>
-    {% endif %}
+        {% if pokedex_progression %}
+            {% for item in pokedex_progression %}
+            <div style="margin-bottom: 1rem; padding: 0.75rem; background: var(--fond); border-radius: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                    <span style="font-weight: 600; font-size: 0.95rem;">{{ item.pokedex.nom }}</span>
+                    <span class="jeu-badge">{{ item.pokedex.jeu.nom }}</span>
+                </div>
+                <div class="progression-bar">
+                    <div class="progression-fill"
+                         style="width: {% widthratio item.captures item.total 100 %}%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
+                    <span style="font-size: 0.82rem; color: var(--texte-leger);">{{ item.captures }}/{{ item.total }} capturés</span>
+                    <a href="{% url 'pokedex:detail' item.pokedex.pk %}" class="btn-secondary"
+                       style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--texte-leger);">Aucun Pokédex pour le moment.</p>
+            <a href="{% url 'pokedex:creer' %}" class="btn" style="margin-top: 0.5rem;">+ Créer un Pokédex</a>
+        {% endif %}
+    </div>
+
+    <div>
+        <div class="card" style="margin-bottom: 1rem;">
+            <h2 style="color: var(--violet-fonce); margin-bottom: 1rem;">🏪 Mes annonces actives</h2>
+            {% if annonces_actives %}
+                {% for annonce in annonces_actives %}
+                <div style="display: flex; justify-content: space-between; align-items: center;
+                            padding: 0.6rem 0; border-bottom: 1px solid var(--border);">
+                    {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        {% if pokemon %}
+                        <img src="{{ pokemon.sprite_url }}" width="32" alt="{{ pokemon.nom_fr }}">
+                        <span style="font-size: 0.9rem; font-weight: 600;">{{ pokemon.nom_fr }}</span>
+                        {% else %}
+                        <span>Annonce #{{ annonce.pk }}</span>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+                    <a href="{% url 'marketplace:detail_annonce' annonce.pk %}"
+                       class="btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: var(--texte-leger);">Aucune annonce active.</p>
+                <a href="{% url 'marketplace:creer_annonce' %}" class="btn" style="margin-top: 0.5rem;">+ Créer une annonce</a>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2 style="color: var(--violet-fonce); margin-bottom: 1rem;">📬 Propositions reçues</h2>
+            {% if propositions_attente %}
+                {% for echange in propositions_attente %}
+<div style="display: flex; justify-content: space-between; align-items: center;
+            padding: 0.6rem 0; border-bottom: 1px solid var(--border);">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        {% with pokemon=cache|get_item:echange.annonce.pokemon_cherche_id %}
+        {% if pokemon %}
+        <img src="{{ pokemon.sprite_url }}" width="32" alt="{{ pokemon.nom_fr }}">
+        <span style="font-size: 0.9rem;">
+            <strong>{{ echange.user_demandeur.pseudo }}</strong> propose un échange pour <strong>{{ pokemon.nom_fr }}</strong>
+        </span>
+        {% else %}
+        <span style="font-size: 0.9rem;">Annonce #{{ echange.annonce.pk }} — <strong>{{ echange.user_demandeur.pseudo }}</strong></span>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <a href="{% url 'marketplace:detail_echange' echange.pk %}"
+       class="btn" style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+</div>
+{% endfor %}
+            {% else %}
+                <p style="color: var(--texte-leger);">Aucune proposition en attente.</p>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 
-<div class="card">
-    <h2 style="color: #4a1472;">🏪 Mes annonces actives</h2>
-    {% if annonces_actives %}
-        {% for annonce in annonces_actives %}
-        <p>
-            Annonce #{{ annonce.pk }} —
-            <a href="{% url 'marketplace:detail_annonce' annonce.pk %}">Voir →</a>
-        </p>
-        {% endfor %}
-    {% else %}
-        <p>Aucune annonce active.</p>
-    {% endif %}
-</div>
-
-<div class="card">
-    <h2 style="color: #4a1472;">📬 Propositions reçues en attente</h2>
-    {% if propositions_attente %}
-        {% for echange in propositions_attente %}
-        <p>
-            Annonce #{{ echange.annonce.pk }} —
-            proposée par {{ echange.user_demandeur.pseudo }} —
-            <a href="{% url 'marketplace:detail_echange' echange.pk %}">Voir →</a>
-        </p>
-        {% endfor %}
-    {% else %}
-        <p>Aucune proposition en attente.</p>
-    {% endif %}
-</div>
+<style>
+@media (max-width: 640px) {
+    .dashboard-grid { grid-template-columns: 1fr !important; }
+}
+</style>
 {% endblock %}

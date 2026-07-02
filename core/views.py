@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from pokedex.models import Pokedex
+from pokedex.models import Pokedex, PokemonCache
 from marketplace.models import Annonce, Echange
 
 
@@ -16,7 +16,6 @@ def accueil(request):
 
 @login_required
 def tableau_de_bord(request):
-    """Tableau de bord après connexion."""
     pokedex_list = Pokedex.objects.filter(
         user=request.user
     ).select_related('jeu')
@@ -44,10 +43,22 @@ def tableau_de_bord(request):
         statut='en_attente'
     ).select_related('annonce', 'user_demandeur')
 
+    # Cache pour les noms de Pokémon des annonces
+    ids = set()
+    for annonce in annonces_actives:
+        ids.add(annonce.pokemon_cherche_id)
+    for echange in propositions_attente:
+        ids.add(echange.annonce.pokemon_cherche_id)
+    cache = {
+        p.pokemon_id: p
+        for p in PokemonCache.objects.filter(pokemon_id__in=ids)
+    }
+
     return render(request, 'core/tableau_de_bord.html', {
         'pokedex_progression': pokedex_progression,
         'annonces_actives': annonces_actives,
         'propositions_attente': propositions_attente,
+        'cache': cache,
     })
 
 
