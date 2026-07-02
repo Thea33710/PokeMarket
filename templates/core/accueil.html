@@ -3,34 +3,46 @@
 {% block title %}Accueil — PokéMarket{% endblock %}
 
 {% block content %}
-<div class="card" style="text-align: center;">
-    <h1 style="color: #4a1472; font-size: 2rem; margin-bottom: 0.5rem;">
-        🎮 Bienvenue sur PokéMarket !
-    </h1>
-    <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">
-        La plateforme communautaire pour les joueurs Pokémon Nintendo Switch 💜
-    </p>
-
-    <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
-        <a href="/auth/inscription/" class="btn">Créer un compte 🚀</a>
-        <a href="/auth/connexion/" class="btn" style="background: #4a1472;">
-            Se connecter 🔐
-        </a>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 2.2rem; color: var(--violet-fonce); margin-bottom: 1rem; line-height: 1.2;">
+            Échangez vos Pokémon en toute simplicité
+        </h1>
+        <p style="color: var(--texte-leger); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            Complétez votre Pokédex grâce à une communauté de dresseurs passionnés.
+            Trouvez les Pokémon que vous recherchez et proposez vos échanges en toute sécurité.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/auth/connexion/" class="btn">Se connecter</a>
+            <a href="/auth/inscription/" class="btn-secondary">S'inscrire</a>
+        </div>
+    </div>
+    <div style="background: var(--lavande); border-radius: 16px; height: 200px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 4rem;">
+        🎮
     </div>
 </div>
 
-<div class="card">
-    <h2 style="color: #4a1472;">✨ Ce que tu trouveras sur PokéMarket</h2>
-    <ul style="margin-top: 1rem; line-height: 2;">
-        <li>📖 <strong>Pokédex sauvegardables</strong> — suis ta progression sur plusieurs parties</li>
-        <li>🤝 <strong>Marketplace d'échanges</strong> — trouve des partenaires pour tes échanges (réservé aux membres)</li>
-        <li>🔢 <strong>Codes communautaires</strong> — accède aux codes standardisés de la communauté</li>
-    </ul>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📖</div>
+        <h3 style="color: var(--violet-moyen); margin-bottom: 0.5rem;">Suivez votre Pokédex</h3>
+        <p style="color: var(--texte-leger); font-size: 0.88rem;">Créez et gérez vos Pokédex par génération. Suivez votre progression et identifiez les Pokémon manquants.</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤝</div>
+        <h3 style="color: var(--violet-moyen); margin-bottom: 0.5rem;">Marketplace d'échanges</h3>
+        <p style="color: var(--texte-leger); font-size: 0.88rem;">Publiez vos annonces et proposez des échanges à la communauté. Aucune équivalence requise.</p>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">#️⃣</div>
+        <h3 style="color: var(--violet-moyen); margin-bottom: 0.5rem;">Codes communautaires</h3>
+        <p style="color: var(--texte-leger); font-size: 0.88rem;">Accédez aux codes Link Trade standardisés par la communauté pour échanger rapidement.</p>
+    </div>
 </div>
 
-<div class="card" style="text-align: center;">
-    <a href="/codes-communautaires/" class="btn-secondary">
-        Voir les codes communautaires →
-    </a>
+<div style="text-align: center;">
+    <a href="/codes-communautaires/" class="btn-secondary">Voir les codes communautaires →</a>
 </div>
 {% endblock %}

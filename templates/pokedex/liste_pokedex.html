@@ -3,42 +3,37 @@
 {% block title %}Mes Pokédex{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="page-header">
-        <h1>Mes Pokédex</h1>
-        <a href="{% url 'pokedex:creer' %}" class="btn btn-primary">+ Nouveau Pokédex</a>
-    </div>
-
-    {% if pokedex_list %}
-    <div class="pokedex-grid">
-        {% for pokedex in pokedex_list %}
-        <div class="pokedex-card">
-            <a href="{% url 'pokedex:detail' pokedex.pk %}" class="pokedex-card-link">
-                <div class="pokedex-card-header">
-                    <h2>{{ pokedex.nom }}</h2>
-                    <span class="jeu-badge">{{ pokedex.jeu.nom }}</span>
-                </div>
-                <div class="pokedex-card-body">
-                    <div class="progression">
-                        <span>{{ pokedex.jeu.nom }}</span>
-                    </div>
-                    {% if pokedex.mode_shiny %}
-                    <span class="shiny-badge">✨ Shiny</span>
-                    {% endif %}
-                </div>
-            </a>
-            <form method="post" action="{% url 'pokedex:supprimer' pokedex.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="btn-secondary">🗑️ Supprimer</button>
-            </form>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="empty-state">
-        <p>Tu n'as pas encore de Pokédex.</p>
-        <a href="{% url 'pokedex:creer' %}" class="btn btn-primary">Créer mon premier Pokédex</a>
-    </div>
-    {% endif %}
+<div class="page-header">
+    <h1>📖 Mes Pokédex</h1>
+    <a href="{% url 'pokedex:creer' %}" class="btn">+ Nouveau Pokédex</a>
 </div>
+
+{% if pokedex_list %}
+<div class="pokedex-grid">
+    {% for pokedex in pokedex_list %}
+    <div class="pokedex-card">
+        <a href="{% url 'pokedex:detail' pokedex.pk %}" class="pokedex-card-link">
+            <div class="pokedex-card-header">
+                <h2>{{ pokedex.nom }}</h2>
+                <span class="jeu-badge">{{ pokedex.jeu.nom }}</span>
+            </div>
+            <div class="pokedex-card-body">
+                {% if pokedex.mode_shiny %}
+                <span class="shiny-badge">✨ Shiny</span>
+                {% endif %}
+            </div>
+        </a>
+        <form method="post" action="{% url 'pokedex:supprimer' pokedex.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">🗑️ Supprimer</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Tu n'as pas encore de Pokédex.</p>
+    <a href="{% url 'pokedex:creer' %}" class="btn">Créer mon premier Pokédex</a>
+</div>
+{% endif %}
 {% endblock %}
