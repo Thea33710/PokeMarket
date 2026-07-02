@@ -1,24 +1,28 @@
 {% extends "base.html" %}
+{% load marketplace_extras %}
 
 {% block title %}Mon profil — PokéMarket{% endblock %}
 
 {% block content %}
-<div class="container">
+
+<div class="card" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem;">
     <div style="width: 80px; height: 80px; border-radius: 50%;
                 background: {{ user.avatar_couleur }};
-                border: 3px solid #212121;
-                display: flex; align-items: center; justify-content: center;
-                margin: 0 auto 1rem;">
+                border: 3px solid #212121; flex-shrink: 0;
+                display: flex; align-items: center; justify-content: center;">
         {% if user.pokemon_avatar_id %}
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ user.pokemon_avatar_id }}.png"
-                 alt="avatar" width="60">
+                 alt="avatar" width="64">
         {% else %}
-            <span style="font-size: 2rem;">❓</span>
+            <span style="font-size: 2.5rem;">❓</span>
         {% endif %}
     </div>
-    <h1 style="text-align: center;">👤 {{ user.pseudo }}</h1>
-    <p style="text-align: center;">Email : {{ user.email }}</p>
-    <p style="text-align: center;">🔄 Échanges effectués : {{ user.nb_echanges }}</p>
+    <div>
+        <h1 style="color: var(--violet-fonce); font-size: 1.4rem;">{{ user.pseudo }}</h1>
+        <p style="color: var(--texte-leger); font-size: 0.88rem;">{{ user.email }}</p>
+        <p style="color: var(--texte-leger); font-size: 0.88rem; margin-top: 0.3rem;">🔄 {{ user.nb_echanges }} échange(s) réussi(s)</p>
+    </div>
+</div>
 
 {% if mode_edition %}
 <form method="post">
@@ -28,9 +32,7 @@
         <h2>🎨 Avatar</h2>
         <div class="form-group autocomplete-wrapper">
             <label for="avatar-search">Choisis ton Pokémon</label>
-            <input type="text"
-                   id="avatar-search"
-                   name="q"
+            <input type="text" id="avatar-search" name="q"
                    placeholder="Tape un nom... ex: Poussacha"
                    autocomplete="off"
                    hx-get="{% url 'marketplace:autocomplete_pokemon' %}"
@@ -40,13 +42,11 @@
             <input type="hidden" name="pokemon_avatar_id" id="id_pokemon_avatar_id"
                    value="{{ user.pokemon_avatar_id|default:'' }}">
         </div>
-
         <div id="avatar-choix" class="pokemon-choisi"
              style="{% if not user.pokemon_avatar_id %}display:none{% endif %}">
             ✅ Pokémon sélectionné : <strong id="avatar-nom-affiche"></strong>
             <button type="button" onclick="effacerChoixAvatar()">✏️</button>
         </div>
-
         <div class="form-group">
             <label>Couleur de fond</label>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
@@ -75,118 +75,135 @@
         <div class="form-group">
             <label for="visibilite_code_ami">Visibilité</label>
             <select name="visibilite_code_ami" id="visibilite_code_ami">
-                <option value="prive" {% if user.visibilite_code_ami == 'prive' %}selected{% endif %}>
-                    Privé
-                </option>
-                <option value="public" {% if user.visibilite_code_ami == 'public' %}selected{% endif %}>
-                    Public
-                </option>
-                <option value="non_renseigne" {% if user.visibilite_code_ami == 'non_renseigne' %}selected{% endif %}>
-                    Non renseigné
-                </option>
+                <option value="prive" {% if user.visibilite_code_ami == 'prive' %}selected{% endif %}>Privé</option>
+                <option value="public" {% if user.visibilite_code_ami == 'public' %}selected{% endif %}>Public</option>
+                <option value="non_renseigne" {% if user.visibilite_code_ami == 'non_renseigne' %}selected{% endif %}>Non renseigné</option>
             </select>
         </div>
     </div>
 
     <div class="detail-section">
         <h2>🎮 Jeux possédés</h2>
-        {% for jeu in jeux %}
-        <label style="display: block; margin-bottom: 0.3rem;">
-            <input type="checkbox" name="jeux_possedes" value="{{ jeu.pk }}"
-                   {% if jeu in user.jeux_possedes.all %}checked{% endif %}>
-            {{ jeu.nom }}
-        </label>
-        {% endfor %}
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            {% for jeu in jeux %}
+            <label style="display: flex; align-items: center; gap: 0.4rem;
+                          padding: 0.4rem 0.8rem; border-radius: 20px;
+                          background: var(--lavande); cursor: pointer;
+                          font-size: 0.88rem;">
+                <input type="checkbox" name="jeux_possedes" value="{{ jeu.pk }}"
+                       {% if jeu in user.jeux_possedes.all %}checked{% endif %}>
+                {{ jeu.nom }}
+            </label>
+            {% endfor %}
+        </div>
     </div>
 
-    <button type="submit" class="btn">💾 Enregistrer</button>
-    <a href="{% url 'auth:profil' %}" class="btn-secondary">Annuler</a>
+    <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn">💾 Enregistrer</button>
+        <a href="{% url 'auth:profil' %}" class="btn-secondary">Annuler</a>
+    </div>
 </form>
 
 {% else %}
 
-<div class="detail-section">
-    <h2>🎨 Avatar</h2>
-    <p>{% if user.pokemon_avatar_id %}Pokémon #{{ user.pokemon_avatar_id }}{% else %}Aucun{% endif %}</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+    <div class="detail-section">
+        <h2>🔑 Code Ami Switch</h2>
+        {% if user.code_ami_switch %}
+            <p style="font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem;">{{ user.code_ami_switch }}</p>
+            <span class="badge">{{ user.get_visibilite_code_ami_display }}</span>
+        {% else %}
+            <p style="color: var(--texte-leger);">Non renseigné</p>
+        {% endif %}
+    </div>
+
+    <div class="detail-section">
+        <h2>🎮 Jeux possédés</h2>
+        {% if user.jeux_possedes.all %}
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            {% for jeu in user.jeux_possedes.all %}
+                <span class="badge">{{ jeu.nom }}</span>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: var(--texte-leger);">Aucun jeu renseigné</p>
+        {% endif %}
+    </div>
 </div>
 
-<div class="detail-section">
-    <h2>🔑 Code Ami Switch</h2>
-    {% if user.code_ami_switch %}
-        <p>{{ user.code_ami_switch }}</p>
-        <p>Visibilité : {{ user.get_visibilite_code_ami_display }}</p>
-    {% else %}
-        <p>Non renseigné</p>
-    {% endif %}
-</div>
-
-<div class="detail-section">
-    <h2>🎮 Jeux possédés</h2>
-    {% if user.jeux_possedes.all %}
-        <ul>
-        {% for jeu in user.jeux_possedes.all %}
-            <li>{{ jeu.nom }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun jeu renseigné</p>
-    {% endif %}
-</div>
-
-<a href="?edit=1" class="btn">✏️ Modifier mon profil</a>
+<a href="?edit=1" class="btn" style="margin-bottom: 1.5rem; display: inline-block;">✏️ Modifier mon profil</a>
 
 {% endif %}
 
-    <div class="detail-section">
-        <h2>📬 Propositions reçues sur mes annonces</h2>
-        {% if echanges_recus %}
-            {% for echange in echanges_recus %}
-            <div class="card">
-                <p>Annonce #{{ echange.annonce.pk }} —
-                proposée par {{ echange.user_demandeur.pseudo }}</p>
-                <p>Méthode : {{ echange.get_methode_utilisee_display }}</p>
-                <a href="{% url 'marketplace:detail_echange' echange.pk %}">
-                    Voir l'échange →
-                </a>
+<div class="detail-section">
+    <h2>📬 Propositions reçues sur mes annonces</h2>
+    {% if echanges_recus %}
+    {% for echange in echanges_recus %}
+    <div style="display: flex; justify-content: space-between; align-items: center;
+                        padding: 0.6rem 0; border-bottom: 1px solid var(--border);">
+        <div>
+            {% with pokemon=cache|get_item:echange.annonce.pokemon_cherche_id %}
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                {% if pokemon %}
+                <img src="{{ pokemon.sprite_url }}" width="32" alt="{{ pokemon.nom_fr }}">
+                <strong>{{ pokemon.nom_fr }}</strong>
+                {% else %}
+                <span>Annonce #{{ echange.annonce.pk }}</span>
+                {% endif %}
+                <span style="color: var(--texte-leger);">— {{ echange.user_demandeur.pseudo }}</span>
             </div>
-            {% endfor %}
-        {% else %}
-            <p>Aucune proposition reçue pour le moment.</p>
-        {% endif %}
-    </div>
+            {% endwith %}
 
-    <div class="detail-section">
-        <h2>📤 Mes propositions envoyées</h2>
-        {% if echanges_demandes %}
-            {% for echange in echanges_demandes %}
-            <div class="card">
-                <p>Annonce #{{ echange.annonce.pk }} de
-                {{ echange.annonce.user.pseudo }}</p>
-                <p>Méthode : {{ echange.get_methode_utilisee_display }}</p>
-                <a href="{% url 'marketplace:detail_echange' echange.pk %}">
-                    Voir l'échange →
-                </a>
+                <p style="font-size: 0.8rem; color: var(--texte-leger);">{{ echange.get_methode_utilisee_display }}</p>
             </div>
-            {% endfor %}
-        {% else %}
-            <p>Aucune proposition envoyée pour le moment.</p>
-        {% endif %}
-    </div>
+            <a href="{% url 'marketplace:detail_echange' echange.pk %}" class="btn-secondary"
+               style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: var(--texte-leger);">Aucune proposition reçue pour le moment.</p>
+    {% endif %}
 </div>
+
+<div class="detail-section">
+    <h2>📤 Mes propositions envoyées</h2>
+    {% if echanges_demandes %}
+    {% for echange in echanges_demandes %}
+    <div style="display: flex; justify-content: space-between; align-items: center;
+                        padding: 0.6rem 0; border-bottom: 1px solid var(--border);">
+        <div>
+            {% with pokemon=cache|get_item:echange.annonce.pokemon_cherche_id %}
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                {% if pokemon %}
+                <img src="{{ pokemon.sprite_url }}" width="32" alt="{{ pokemon.nom_fr }}">
+                <strong>{{ pokemon.nom_fr }}</strong>
+                {% else %}
+                <span>Annonce #{{ echange.annonce.pk }}</span>
+                {% endif %}
+                <span style="color: var(--texte-leger);">— {{ echange.annonce.user.pseudo }}</span>
+            </div>
+            {% endwith %}
+            <p style="font-size: 0.8rem; color: var(--texte-leger);">{{ echange.get_methode_utilisee_display }}</p>
+        </div>
+        <a href="{% url 'marketplace:detail_echange' echange.pk %}" class="btn-secondary"
+            style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p style="color: var(--texte-leger);">Aucune proposition envoyée pour le moment.</p>
+    {% endif %}
+    </div>
 
 <script>
 function choisirPokemon(id, nom, element) {
     const resultats = element.closest('.autocomplete-resultats');
     const cible = resultats.id.replace('-resultats', '');
-
     if (cible === 'avatar') {
         document.getElementById('id_pokemon_avatar_id').value = id;
     }
-
     document.getElementById(cible + '-nom-affiche').textContent = '#' + id + ' — ' + nom;
     document.getElementById(cible + '-search').value = '';
     resultats.innerHTML = '';
-
     document.getElementById(cible + '-choix').style.display = 'block';
     document.getElementById(cible + '-search').style.display = 'none';
 }

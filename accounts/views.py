@@ -129,10 +129,22 @@ def profil(request):
         statut='en_attente'
     ).select_related('annonce', 'user_demandeur')
 
+    # Cache Pokémon
+    ids = set()
+    for e in echanges_recus:
+        ids.add(e.annonce.pokemon_cherche_id)
+    for e in echanges_demandes:
+        ids.add(e.annonce.pokemon_cherche_id)
+    cache = {
+        p.pokemon_id: p
+        for p in PokemonCache.objects.filter(pokemon_id__in=ids)
+    }
+
     return render(request, 'accounts/profil.html', {
         'echanges_demandes': echanges_demandes,
         'echanges_recus': echanges_recus,
         'couleurs': couleurs,
         'jeux': Jeu.objects.all(),
         'mode_edition': request.GET.get('edit') == '1',
+        'cache': cache,
     })
