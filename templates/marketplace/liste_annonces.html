@@ -40,87 +40,64 @@
             data-noms="{{ noms_annonces|get_item:annonce.pk }}"
             data-noms-propose="{{ noms_propose|get_item:annonce.pk }}"
             data-shiny-propose="{% if annonce.propositions.0.shiny %}true{% else %}false{% endif %}">
-            <div class="annonce-cherche">
-                <span class="label">🔍 Recherche</span>
-                {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
-                {% if pokemon %}
-                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
-                <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
-                {% else %}
-                <span class="pokemon-nom">#{{ annonce.pokemon_cherche_id }}</span>
-                {% endif %}
-                {% endwith %}
-                {% if annonce.cherche_shiny %}
-                <span class="badge-shiny">✨ Shiny</span>
-                {% endif %}
-                {% if annonce.cherche_nature %}
-                <span class="badge">{{ annonce.cherche_nature }}</span>
-                {% endif %}
-                {% if annonce.cherche_talents %}
-                {% for talent in annonce.cherche_talents %}
-                <span class="badge">{{ talent }}</span>
-                {% endfor %}
-                {% endif %}
-                {% if annonce.cherche_genre %}
-                {% for g in annonce.cherche_genre %}
-                <span class="badge">{{ g }}</span>
-                {% endfor %}
-                {% endif %}
+            <div class="annonce-card-main">
+                <div class="annonce-cherche">
+                    <span class="label">🔍</span>
+                    {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
+                    {% if pokemon %}
+                    <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
+                    <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
+                    {% endif %}
+                    {% endwith %}
+                    {% if annonce.cherche_shiny %}<span class="badge-shiny">✨ Shiny</span>{% endif %}
+                    {% if annonce.cherche_nature %}<span class="badge">{{ annonce.cherche_nature }}</span>{% endif %}
+                    {% if annonce.cherche_talents %}{% for talent in annonce.cherche_talents %}<span class="badge">{{ talent }}</span>{% endfor %}{% endif %}
+                    {% if annonce.cherche_genre %}{% for g in annonce.cherche_genre %}<span class="badge">{{ g }}</span>{% endfor %}{% endif %}
+                </div>
+
+                <span class="annonce-separateur">⇄</span>
+
+                <div class="annonce-propose">
+                    <span class="label">🎁</span>
+                    {% for p in annonce.propositions %}
+                    {% with pokemon=cache|get_item:p.pokemon_id %}
+                    {% if pokemon %}
+                    <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
+                    <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
+                    {% endif %}
+                    {% endwith %}
+                    {% if p.shiny %}<span class="badge-shiny">✨ Shiny</span>{% endif %}
+                    {% if p.genre %}{% for g in p.genre %}<span class="badge">{{ g }}</span>{% endfor %}{% endif %}
+                    {% if p.nature %}<span class="badge">{{ p.nature }}</span>{% endif %}
+                    {% if p.talents %}{% for talent in p.talents %}<span class="badge">{{ talent }}</span>{% endfor %}{% endif %}
+                    {% endfor %}
+                </div>
             </div>
 
-            <div class="annonce-propose">
-                <span class="label">🎁 Propose</span>
-                {% for p in annonce.propositions %}
-                {% with pokemon=cache|get_item:p.pokemon_id %}
-                {% if pokemon %}
-                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="40">
-                <span class="pokemon-nom">{{ pokemon.nom_fr }}</span>
-                {% else %}
-                <span class="pokemon-nom">#{{ p.pokemon_id }}</span>
-                {% endif %}
-                {% endwith %}
-                {% if p.shiny %}
-                <span class="badge-shiny">✨ Shiny</span>
-                {% endif %}
-                {% if p.genre %}
-                {% for g in p.genre %}
-                <span class="badge">{{ g }}</span>
-                {% endfor %}
-                {% endif %}
-                {% if p.nature %}
-                <span class="badge">{{ p.nature }}</span>
-                {% endif %}
-                {% if p.talents %}
-                {% for talent in p.talents %}
-                <span class="badge">{{ talent }}</span>
-                {% endfor %}
-                {% endif %}
-                {% endfor %}
+            <div class="annonce-footer">
+                <div class="annonce-meta">
+                    <span>👤 {{ annonce.user.pseudo }}</span>
+                    <span>⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}</span>
+                    {% if annonce.methode_echange == 'link_code' %}
+                    <span class="badge">🔗 Link Code</span>
+                    {% elif annonce.methode_echange == 'code_ami' %}
+                    <span class="badge">👤 Code Ami</span>
+                    {% else %}
+                    <span class="badge">🔗👤 Les deux</span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'marketplace:detail_annonce' annonce.pk %}" class="btn-secondary">
+                    Voir le détail →
+                </a>
             </div>
-
-            <div class="annonce-meta">
-                <span>👤 {{ annonce.user.pseudo }}</span>
-                <span>📅 {{ annonce.date_creation|date:"d/m/Y" }}</span>
-                <span>⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}</span>
-                {% if annonce.methode_echange == 'link_code' %}
-                <span class="badge">🔗 Link Code</span>
-                {% elif annonce.methode_echange == 'code_ami' %}
-                <span class="badge">👤 Code Ami</span>
-                {% else %}
-                <span class="badge">🔗👤 Les deux</span>
-                {% endif %}
-            </div>
-            <a href="{% url 'marketplace:detail_annonce' annonce.pk %}" class="btn-secondary">
-                Voir le détail →
-            </a>
         </div>
         {% endfor %}
     </div>
     {% else %}
     <p>Aucune annonce pour le moment. Sois le premier ! 🎉</p>
     {% endif %}
-
 </div>
+
 <script>
     const filtreNom = document.getElementById('filtre-nom');
     const filtreShiny = document.getElementById('filtre-shiny');
@@ -129,29 +106,29 @@
     const cartes = document.querySelectorAll('.annonce-card');
 
     function filtrer() {
-    const nom = filtreNom.value.toLowerCase();
-    const shiny = filtreShiny.checked;
-    const methode = filtreMethode.value;
-    let visible = 0;
+        const nom = filtreNom.value.toLowerCase();
+        const shiny = filtreShiny.checked;
+        const methode = filtreMethode.value;
+        let visible = 0;
 
-    cartes.forEach(carte => {
-        const nomCarte = carte.dataset.nomsPropose || '';
-        const shinyOk = !shiny || carte.dataset.shinyPropose === 'true';
-        const methodeOk = !methode || 
-            carte.dataset.methode === methode || 
-            carte.dataset.methode === 'les_deux';
-        const nomOk = !nom || nomCarte.includes(nom);
+        cartes.forEach(carte => {
+            const nomCarte = carte.dataset.nomsPropose || '';
+            const shinyOk = !shiny || carte.dataset.shinyPropose === 'true';
+            const methodeOk = !methode ||
+                carte.dataset.methode === methode ||
+                carte.dataset.methode === 'les_deux';
+            const nomOk = !nom || nomCarte.includes(nom);
 
-        if (shinyOk && methodeOk && nomOk) {
-            carte.style.display = '';
-            visible++;
-        } else {
-            carte.style.display = 'none';
-        }
-    });
+            if (shinyOk && methodeOk && nomOk) {
+                carte.style.display = '';
+                visible++;
+            } else {
+                carte.style.display = 'none';
+            }
+        });
 
-    compteur.textContent = visible + ' annonce(s) affichée(s)';
-}
+        compteur.textContent = visible + ' annonce(s) affichée(s)';
+    }
 
     filtreNom.addEventListener('input', filtrer);
     filtreShiny.addEventListener('change', filtrer);

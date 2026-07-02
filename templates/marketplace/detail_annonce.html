@@ -10,96 +10,91 @@
         💡 Tu n'as pas renseigné ton Code Ami Switch. Les échanges par Code Ami ne seront pas disponibles pour tes annonces.
     </div>
     {% endif %}
-    <a href="{% url 'marketplace:liste_annonces' %}">← Retour à la liste</a>
 
-    <h1>📢 Annonce #{{ annonce.pk }}</h1>
-    <p>👤 {{ annonce.user.pseudo }} — 📅 {{ annonce.date_creation|date:"d/m/Y" }} — ⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}</p>
+    <a href="{% url 'marketplace:liste_annonces' %}" style="color: var(--violet-moyen); text-decoration: none; font-size: 0.9rem;">← Retour à la liste</a>
+
+    <h1 style="margin: 0.75rem 0 0.25rem; color: var(--violet-fonce);">📢 Annonce #{{ annonce.pk }}</h1>
+    <p style="color: var(--texte-leger); font-size: 0.88rem; margin-bottom: 1.5rem;">
+        👤 {{ annonce.user.pseudo }} — 📅 {{ annonce.date_creation|date:"d/m/Y" }} — ⏰ Expire {{ annonce.expires_at|date:"d/m/Y" }}
+    </p>
 
     <div class="detail-section">
         <h2>🔍 Pokémon recherché</h2>
         {% with pokemon=cache|get_item:annonce.pokemon_cherche_id %}
-            {% if pokemon %}
-                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="80">
-                <h3>{{ pokemon.nom_fr }}</h3>
-            {% endif %}
+        {% if pokemon %}
+        <div style="display: flex; align-items: center; gap: 1rem; margin: 0.75rem 0;">
+            <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="64">
+            <strong style="font-size: 1.1rem;">{{ pokemon.nom_fr }}</strong>
+        </div>
+        {% endif %}
         {% endwith %}
-
-        <ul>
-            {% if annonce.cherche_shiny %}<li>✨ Shiny souhaité</li>{% endif %}
-            {% if annonce.cherche_genre %}
-                <li>Genre :
-                    {% for g in annonce.cherche_genre %}{{ g }} {% endfor %}
-                </li>
-            {% endif %}
-            {% if annonce.cherche_nature %}<li>Nature : {{ annonce.cherche_nature }}</li>{% endif %}
-            {% if annonce.cherche_talents %}
-                <li>Talents :
-                    {% for t in annonce.cherche_talents %}{{ t }} {% endfor %}
-                </li>
-            {% endif %}
-            {% if annonce.cherche_ivs_min %}
-                <li>IVs minimum :
-                    {% for stat, val in annonce.cherche_ivs_min.items %}
-                        {{ stat }} : {{ val }}
-                    {% endfor %}
-                </li>
-            {% endif %}
-            {% if annonce.cherche_commentaire %}<li>💬 {{ annonce.cherche_commentaire }}</li>{% endif %}
-        </ul>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;">
+            {% if annonce.cherche_shiny %}<span class="badge-shiny">✨ Shiny</span>{% endif %}
+            {% if annonce.cherche_genre %}{% for g in annonce.cherche_genre %}<span class="badge">{{ g }}</span>{% endfor %}{% endif %}
+            {% if annonce.cherche_nature %}<span class="badge">{{ annonce.cherche_nature }}</span>{% endif %}
+            {% if annonce.cherche_talents %}{% for t in annonce.cherche_talents %}<span class="badge">{{ t }}</span>{% endfor %}{% endif %}
+            {% if annonce.cherche_commentaire %}<span class="badge">💬 {{ annonce.cherche_commentaire }}</span>{% endif %}
+        </div>
+        {% if annonce.cherche_ivs_min %}
+        <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--texte-leger);">
+            IVs minimum :
+            {% for stat, val in annonce.cherche_ivs_min.items %}
+            <span class="badge">{{ stat }} ≥ {{ val }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <div class="detail-section">
         <h2>🎁 Pokémon proposé</h2>
         {% for p in annonce.propositions %}
-            {% with pokemon=cache|get_item:p.pokemon_id %}
-                {% if pokemon %}
-                    <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="80">
-                    <h3>{{ pokemon.nom_fr }}</h3>
-                {% endif %}
-            {% endwith %}
-            <ul>
-                {% if p.shiny %}<li>✨ Shiny</li>{% endif %}
-                {% if p.genre %}
-                    <li>Genre :
-                        {% for g in p.genre %}{{ g }} {% endfor %}
-                    </li>
-                {% endif %}
-                {% if p.nature %}<li>Nature : {{ p.nature }}</li>{% endif %}
-                {% if p.talents %}
-                    <li>Talents :
-                        {% for t in p.talents %}{{ t }} {% endfor %}
-                    </li>
-                {% endif %}
-                {% if p.ivs %}
-                    <li>IVs :
-                        {% for stat, val in p.ivs.items %}
-                            {{ stat }} : {{ val }}
-                        {% endfor %}
-                    </li>
-                {% endif %}
-            </ul>
+        {% with pokemon=cache|get_item:p.pokemon_id %}
+        {% if pokemon %}
+        <div style="display: flex; align-items: center; gap: 1rem; margin: 0.75rem 0;">
+            <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.nom_fr }}" width="64">
+            <strong style="font-size: 1.1rem;">{{ pokemon.nom_fr }}</strong>
+        </div>
+        {% endif %}
+        {% endwith %}
+        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+            {% if p.shiny %}<span class="badge-shiny">✨ Shiny</span>{% endif %}
+            {% if p.genre %}{% for g in p.genre %}<span class="badge">{{ g }}</span>{% endfor %}{% endif %}
+            {% if p.nature %}<span class="badge">{{ p.nature }}</span>{% endif %}
+            {% if p.talents %}{% for t in p.talents %}<span class="badge">{{ t }}</span>{% endfor %}{% endif %}
+        </div>
+        {% if p.ivs %}
+        <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--texte-leger);">
+            IVs :
+            {% for stat, val in p.ivs.items %}
+            <span class="badge">{{ stat }} : {{ val }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endfor %}
     </div>
 
     <div class="detail-section">
         <h2>⚙️ Méthode d'échange</h2>
         {% if annonce.methode_echange == 'link_code' %}
-            <p>🔗 Link Code uniquement</p>
+        <p>🔗 Link Code uniquement</p>
         {% elif annonce.methode_echange == 'code_ami' %}
-            <p>👤 Code Ami Switch uniquement</p>
+        <p>👤 Code Ami Switch uniquement</p>
         {% else %}
-            <p>🔗👤 Link Code ou Code Ami Switch</p>
+        <p>🔗👤 Link Code ou Code Ami Switch</p>
         {% endif %}
     </div>
-    {% if annonce.user == request.user %}
-    <a href="{% url 'marketplace:clore_annonce' annonce.pk %}" class="btn-secondary">
-        🔒 Clore l'annonce
-    </a>
-    {% endif %}
-    {% if user.is_authenticated and annonce.user != user and annonce.statut == 'ouverte' %}
-        <a href="{% url 'marketplace:proposer_echange' annonce.pk %}">
+
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+        {% if annonce.user == request.user %}
+        <a href="{% url 'marketplace:clore_annonce' annonce.pk %}" class="btn-secondary">
+            🔒 Clore l'annonce
+        </a>
+        {% endif %}
+        {% if user.is_authenticated and annonce.user != user and annonce.statut == 'ouverte' %}
+        <a href="{% url 'marketplace:proposer_echange' annonce.pk %}" class="btn">
             🤝 Proposer un échange
         </a>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

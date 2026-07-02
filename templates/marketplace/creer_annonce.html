@@ -35,8 +35,11 @@
 
         <h3>Obligatoires</h3>
         <div class="form-group">
-            {{ form.cherche_shiny.label_tag }}
-            {{ form.cherche_shiny }}
+            <label
+                style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; text-transform: none; letter-spacing: 0;">
+                {{ form.cherche_shiny }}
+                ✨ Shiny
+            </label>
         </div>
         <div class="form-group">
             {{ form.cherche_genre.label_tag }}
@@ -44,8 +47,8 @@
         </div>
 
         <details>
-            <summary>
-                <h3>Optionnels</h3>
+            <summary style="cursor: pointer; margin: 1rem 0; color: var(--violet-moyen); font-weight: 600;">
+                Précisions optionnelles
             </summary>
             <div class="form-group">
                 {{ form.cherche_nature.label_tag }}
@@ -71,6 +74,8 @@
             </div>
         </details>
 
+        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--border);">
+
         <h2>🎁 Pokémon proposé</h2>
 
         <div class="form-group autocomplete-wrapper">
@@ -88,8 +93,11 @@
 
         <h3>Obligatoires</h3>
         <div class="form-group">
-            {{ form.propose_shiny.label_tag }}
-            {{ form.propose_shiny }}
+            <label
+                style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; text-transform: none; letter-spacing: 0;">
+                {{ form.propose_shiny }}
+                ✨ Shiny
+            </label>
         </div>
         <div class="form-group">
             {{ form.propose_genre.label_tag }}
@@ -97,8 +105,8 @@
         </div>
 
         <details>
-            <summary>
-                <h3>Optionnels</h3>
+            <summary style="cursor: pointer; margin: 1rem 0; color: var(--violet-moyen); font-weight: 600;">
+                Précisions optionnelles
             </summary>
             <div class="form-group">
                 {{ form.propose_nature.label_tag }}
