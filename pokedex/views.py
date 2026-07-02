@@ -7,8 +7,14 @@ from .forms import PokedexForm
 
 @login_required
 def liste_pokedex(request):
-    pokedex_list = Pokedex.objects.filter(user=request.user).select_related('jeu')
-    return render(request, 'pokedex/liste_pokedex.html', {'pokedex_list': pokedex_list})
+    pokedex_list = Pokedex.objects.filter(
+        user=request.user
+    ).select_related('jeu')
+    return render(
+        request,
+        'pokedex/liste_pokedex.html',
+        {'pokedex_list': pokedex_list}
+    )
 
 
 @login_required
@@ -44,13 +50,19 @@ def detail_pokedex(request, pk):
                 'nom': cache.nom_fr,
                 'sprite': cache.sprite_url,
                 'types': cache.types,
-                'statut': pokedex.pokemon_statuses.get(str(pokemon_id), 'non_vu'),
+                'statut': pokedex.pokemon_statuses.get(
+                    str(pokemon_id),
+                    'non_vu'
+                ),
             })
 
     captures = sum(1 for e in entrees if e['statut'] == 'capture')
     shinies = 0
     if pokedex.mode_shiny and pokedex.shiny_statuses:
-        shinies = sum(1 for pid in pokedex.shiny_statuses if pokedex.shiny_statuses[str(pid)])
+        shinies = sum(
+            1 for pid in pokedex.shiny_statuses
+            if pokedex.shiny_statuses[str(pid)]
+        )
     total = len(entrees)
 
     # Types disponibles pour le filtre
@@ -104,7 +116,10 @@ def marquer_pokemon(request, pk, pokemon_id, action):
              and pokedex.shiny_statuses.get(str(pokemon_id), False))
 
     # Recalculer progression
-    captures = sum(1 for s in pokedex.pokemon_statuses.values() if s == 'capture')
+    captures = sum(
+        1 for s in pokedex.pokemon_statuses.values()
+        if s == 'capture'
+    )
     total = len(pokedex.jeu.pokedex_regional)
     shinies = 0
     if pokedex.mode_shiny and pokedex.shiny_statuses:
@@ -123,4 +138,15 @@ def marquer_pokemon(request, pk, pokemon_id, action):
         'captures': captures,
         'total': total,
         'shinies': shinies,
+    })
+
+
+@login_required
+def supprimer_pokedex(request, pk):
+    pokedex = get_object_or_404(Pokedex, pk=pk, user=request.user)
+    if request.method == 'POST':
+        pokedex.delete()
+        return redirect('pokedex:liste')
+    return render(request, 'pokedex/confirmer_suppression.html', {
+        'pokedex': pokedex,
     })

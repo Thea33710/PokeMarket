@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer {{ pokedex.nom }} — PokéMarket{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🗑️ Supprimer {{ pokedex.nom }} ?</h1>
+    <p>Cette action est irréversible. Toute ta progression sera perdue.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Oui, supprimer</button>
+        <a href="{% url 'pokedex:liste' %}" class="btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

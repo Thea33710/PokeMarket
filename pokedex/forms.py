@@ -13,7 +13,9 @@ class PokedexForm(forms.ModelForm):
             'mode_shiny': 'Activer le suivi Shiny',
         }
         widgets = {
-            'nom': forms.TextInput(attrs={'placeholder': 'Ex : Ma partie Écarlate'}),
+            'nom': forms.TextInput(
+                attrs={'placeholder': 'Ex : Ma partie Écarlate'}
+            ),
         }
 
     def __init__(self, *args, **kwargs):

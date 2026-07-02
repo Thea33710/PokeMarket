@@ -132,7 +132,14 @@ class TestVueMarquer(TestCase):
 
     def test_marquer_capture(self):
         """Marquer un Pokémon comme capturé."""
-        url = reverse('pokedex:marquer', args=[self.pokedex.pk, 906, 'capture'])
+        url = reverse(
+            'pokedex:marquer',
+            args=[
+                self.pokedex.pk,
+                906,
+                'capture'
+            ]
+        )
         response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
         self.pokedex.refresh_from_db()
@@ -142,7 +149,14 @@ class TestVueMarquer(TestCase):
         """Décocher capturé repasse à vu."""
         self.pokedex.pokemon_statuses['906'] = 'capture'
         self.pokedex.save()
-        url = reverse('pokedex:marquer', args=[self.pokedex.pk, 906, 'capture'])
+        url = reverse(
+            'pokedex:marquer',
+            args=[
+                self.pokedex.pk,
+                906,
+                'capture'
+            ]
+        )
         response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
         self.pokedex.refresh_from_db()

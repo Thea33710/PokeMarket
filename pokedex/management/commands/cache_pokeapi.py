@@ -51,13 +51,18 @@ def get_talents(abilities):
 
 
 class Command(BaseCommand):
-    help = 'Remplit le cache PokéAPI (noms FR, sprites, types, talents) pour S/V'
+    help = (
+        'Remplit le cache PokéAPI '
+        '(noms FR, sprites, types, talents) pour S/V'
+    )
 
     def handle(self, *args, **kwargs):
         try:
             jeu = Jeu.objects.get(nom='Pokémon Écarlate & Violet')
         except Jeu.DoesNotExist:
-            self.stdout.write(self.style.ERROR('❌ Jeu S/V introuvable. Lance seed_sv d\'abord.'))
+            self.stdout.write(self.style.ERROR(
+                '❌ Jeu S/V introuvable. Lance seed_sv d\'abord.'
+            ))
             return
 
         ids = jeu.pokedex_regional
@@ -108,9 +113,12 @@ class Command(BaseCommand):
 
             except Exception as e:
                 erreurs += 1
-                self.stdout.write(self.style.ERROR(f'  [{i}/{total}] #{pokemon_id} ❌ {e}'))
+                self.stdout.write(self.style.ERROR(
+                    f'  [{i}/{total}] #{pokemon_id} ❌ {e}'
+                ))
                 time.sleep(1)
 
         self.stdout.write(self.style.SUCCESS(
-            f'\n✅ Cache terminé ! {ok} OK, {erreurs} erreurs.'
+            f'\n✅ Cache terminé ! {ok} OK, '
+            f'{erreurs} erreurs.'
         ))

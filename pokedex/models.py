@@ -23,7 +23,11 @@ class Pokedex(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     nom = models.CharField(max_length=120)
     jeu = models.ForeignKey(Jeu, on_delete=models.CASCADE)
-    type_vue = models.CharField(max_length=10, choices=TYPE_VUE_CHOICES, default='regional')
+    type_vue = models.CharField(
+        max_length=10,
+        choices=TYPE_VUE_CHOICES,
+        default='regional'
+    )
     mode_shiny = models.BooleanField(default=False)
     pokemon_statuses = models.JSONField(default=dict)
     shiny_statuses = models.JSONField(null=True, blank=True)
@@ -45,8 +49,8 @@ class PokemonCache(models.Model):
     pokemon_id = models.IntegerField(unique=True)
     nom_fr = models.CharField(max_length=100)
     sprite_url = models.URLField(max_length=300)
-    types = models.JSONField(default=list)  # ex: ['feu', 'vol']
-    talents = models.JSONField(default=list)  # ex: [{'nom': 'Torrent', 'cache': False}]
+    types = models.JSONField(default=list)
+    talents = models.JSONField(default=list)
     date_mise_a_jour = models.DateTimeField(auto_now=True)
 
     def __str__(self):

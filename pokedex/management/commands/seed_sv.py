@@ -31,18 +31,23 @@ class Command(BaseCommand):
         )
 
         if created:
-            self.stdout.write(self.style.SUCCESS('✅ Jeu créé : Pokémon Écarlate & Violet'))
+            self.stdout.write(self.style.SUCCESS(
+                '✅ Jeu créé : Pokémon Écarlate & Violet'
+            ))
         else:
             self.stdout.write('ℹ️  Jeu déjà existant, on continue...')
 
         self.stdout.write('🔍 Récupération du Pokédex Paldea...')
 
         try:
-            r = requests.get('https://pokeapi.co/api/v2/pokedex/paldea/', timeout=10)
+            r = requests.get(
+                'https://pokeapi.co/api/v2/pokedex/paldea/',
+                timeout=10
+            )
             r.raise_for_status()
             data = r.json()
             self.stdout.write(self.style.SUCCESS(
-                f'✅ Pokédex Paldea récupéré ({len(data["pokemon_entries"])} Pokémon)'
+                f'✅ ({len(data["pokemon_entries"])} Pokémon récupéré)'
             ))
         except Exception as e:
             self.stdout.write(self.style.ERROR(f'❌ Erreur Pokédex : {e}'))
@@ -57,5 +62,6 @@ class Command(BaseCommand):
         jeu.save()
 
         self.stdout.write(self.style.SUCCESS(
-            f'✅ Seed terminé ! {len(ids_regionaux)} Pokémon dans le Pokédex Paldea.'
+            f'✅ Seed terminé !'
+            f'{len(ids_regionaux)} Pokémon dans le Pokédex Paldea.'
         ))
