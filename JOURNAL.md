@@ -589,3 +589,27 @@ Aucun !
 - **Profil** : carte avatar + infos en haut, Code Ami + Jeux en deux colonnes, sprites dans les échanges
 - **Liste Pokédex** : cartes propres sans doublon, bouton supprimer rouge discret
 - **Accueil public** : mise en page deux colonnes hero + emoji, trois cartes fonctionnalités
+
+## Sprint Review — Sprint 4
+
+### Ce qui a bien marché
+- Modèle Echange + Link Code fonctionnel dès le premier essai
+- Réutilisation de l'autocomplete HTMX pour l'avatar — gain de temps
+- CSS refonte globale rapide et proche des maquettes Figma
+- Tableau de bord deux colonnes conforme au MVP
+
+### Ce qui a pris du temps
+- Confusion namespace 'auth' vs 'accounts' dans les templates → plusieurs corrections
+- Page profil : plusieurs allers-retours entre lecture/édition/fusion
+- Format Document VS Code casse la syntaxe Django → erreurs silencieuses
+
+### Ce qui reste à faire (signalé par le prof)
+- Revoir le process d'échange (accepter/refuser une proposition)
+- Changement de mot de passe depuis le profil
+- UX/UI à continuer
+
+### Métriques Sprint 4
+- Tâches complétées : 6/6 ✅
+- Tests : 40 tests, 83% couverture ✅
+- CI verte ✅
+- Pages MVP conformes aux maquettes Figma ✅
