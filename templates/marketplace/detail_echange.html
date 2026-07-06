@@ -14,7 +14,7 @@
 
     <div class="detail-section">
         <h2>⚙️ Méthode utilisée</h2>
-        <p>🔗 Link Code</p>
+        <p>{% if echange.methode_utilisee == 'link_code' %}🔗 Link Code{% else %}👤 Code Ami Switch{% endif %}</p>
     </div>
 
     {% if echange.link_code %}
@@ -29,7 +29,7 @@
     {% if echange.methode_utilisee == 'code_ami' %}
     <div class="detail-section">
         <h2>👤 Code Ami Switch</h2>
-        {% if echange.annonce.user.visibilite_code_ami == 'public' and echange.annonce.user.code_ami_switch %}
+        {% if echange.annonce.user.code_ami_switch %}
         <div id="popup-avertissement">
             <p>⚠️ Tu es sur le point de voir le Code Ami Switch de {{ echange.annonce.user.pseudo }}.</p>
             <p>Ne partage ce code à personne d'autre.</p>
@@ -47,7 +47,7 @@
             }
         </script>
         {% else %}
-        <p>😕 {{ echange.annonce.user.pseudo }} n'a pas rendu son Code Ami public.</p>
+        <p>😕 {{ echange.annonce.user.pseudo }} n'a pas renseigné son Code Ami Switch.</p>
         {% endif %}
     </div>
     {% endif %}
