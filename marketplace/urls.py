@@ -12,6 +12,7 @@ urlpatterns = [
         name='autocomplete_pokemon'
     ),
     path('talents/', views.talents_pokemon, name='talents_pokemon'),
+    path('mes-echanges/', views.mes_echanges, name='mes_echanges'),
     path('<int:pk>/', views.detail_annonce, name='detail_annonce'),
     path('<int:pk>/clore/', views.clore_annonce, name='clore_annonce'),
     path(
@@ -28,5 +29,15 @@ urlpatterns = [
         'echanges/<int:pk>/confirmer/',
         views.confirmer_echange,
         name='confirmer_echange'
+    ),
+    path(
+        'echanges/<int:pk>/accepter/',
+        views.accepter_echange,
+        name='accepter_echange'
+    ),
+    path(
+        'echanges/<int:pk>/refuser/',
+        views.refuser_echange,
+        name='refuser_echange'
     ),
 ]

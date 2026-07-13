@@ -5,7 +5,9 @@
 {% block content %}
 <div class="page-header">
     <h1>📖 Mes Pokédex</h1>
+    {% if pokedex_list %}
     <a href="{% url 'pokedex:creer' %}" class="btn">+ Nouveau Pokédex</a>
+    {% endif %}
 </div>
 
 {% if pokedex_list %}

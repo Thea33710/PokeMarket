@@ -25,7 +25,9 @@
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h2 style="color: var(--violet-fonce);">📖 Mes Pokédex</h2>
+            {% if pokedex_progression %}
             <a href="{% url 'pokedex:creer' %}" class="btn" style="font-size: 0.85rem; padding: 0.5rem 1rem;">+ Nouveau</a>
+            {% endif %}
         </div>
         {% if pokedex_progression %}
             {% for item in pokedex_progression %}
@@ -41,7 +43,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.4rem;">
                     <span style="font-size: 0.82rem; color: var(--texte-leger);">{{ item.captures }}/{{ item.total }} capturés</span>
                     <a href="{% url 'pokedex:detail' item.pokedex.pk %}" class="btn-secondary"
-                       style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+                        style="font-size: 0.8rem; padding: 0.3rem 0.8rem; white-space: nowrap; flex-shrink: 0;">Voir →</a>
                 </div>
             </div>
             {% endfor %}
@@ -69,7 +71,7 @@
                     </div>
                     {% endwith %}
                     <a href="{% url 'marketplace:detail_annonce' annonce.pk %}"
-                       class="btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+                        class="btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.8rem; white-space: nowrap; flex-shrink: 0;">Voir →</a>
                 </div>
                 {% endfor %}
             {% else %}
@@ -97,7 +99,7 @@
         {% endwith %}
     </div>
     <a href="{% url 'marketplace:detail_echange' echange.pk %}"
-       class="btn" style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">Voir →</a>
+        class="btn" style="font-size: 0.8rem; padding: 0.3rem 0.8rem; white-space: nowrap; flex-shrink: 0;">Voir →</a>
 </div>
 {% endfor %}
             {% else %}

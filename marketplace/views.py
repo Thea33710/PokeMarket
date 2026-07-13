@@ -250,7 +250,7 @@ def detail_echange(request, pk):
 
 @login_required
 def confirmer_echange(request, pk):
-    echange = get_object_or_404(Echange, pk=pk, statut='en_attente')
+    echange = get_object_or_404(Echange, pk=pk, statut='acceptee')
 
     # Vérifier que l'utilisateur est bien l'un des deux joueurs
     if (request.user != echange.user_demandeur
@@ -292,3 +292,47 @@ def confirmer_echange(request, pk):
         )
 
     return redirect('marketplace:detail_echange', pk=echange.pk)
+
+
+@login_required
+def accepter_echange(request, pk):
+    echange = get_object_or_404(Echange, pk=pk, statut='en_attente')
+    if request.user != echange.annonce.user:
+        messages.error(request, "Tu n'as pas accès à cette action.")
+        return redirect('marketplace:liste_annonces')
+    if request.method == 'POST':
+        echange.statut = 'acceptee'
+        echange.save()
+        messages.success(request, "✅ Tu as accepté cet échange.")
+    return redirect('marketplace:detail_echange', pk=echange.pk)
+
+
+@login_required
+def refuser_echange(request, pk):
+    echange = get_object_or_404(Echange, pk=pk, statut='en_attente')
+    if request.user != echange.annonce.user:
+        messages.error(request, "Tu n'as pas accès à cette action.")
+        return redirect('marketplace:liste_annonces')
+    if request.method == 'POST':
+        echange.statut = 'refusee'
+        echange.save()
+        messages.success(request, "❌ Tu as refusé cet échange.")
+    return redirect('marketplace:detail_echange', pk=echange.pk)
+
+
+@login_required
+def mes_echanges(request):
+    echanges = Echange.objects.filter(
+        user_demandeur=request.user
+    ).select_related('annonce', 'annonce__user').order_by('-date_creation')
+
+    ids = {echange.annonce.pokemon_cherche_id for echange in echanges}
+    cache = {
+        p.pokemon_id: p
+        for p in PokemonCache.objects.filter(pokemon_id__in=ids)
+    }
+
+    return render(request, 'marketplace/mes_echanges.html', {
+        'echanges': echanges,
+        'cache': cache,
+    })

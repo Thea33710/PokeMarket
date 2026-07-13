@@ -87,6 +87,8 @@ def generer_link_code():
 class Echange(models.Model):
     STATUT_CHOICES = [
         ('en_attente', 'En attente'),
+        ('acceptee', 'Acceptée'),
+        ('refusee', 'Refusée'),
         ('confirme', 'Confirmé'),
         ('annule', 'Annulé'),
     ]

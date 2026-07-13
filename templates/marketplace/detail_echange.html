@@ -53,6 +53,32 @@
     {% endif %}
     {% if echange.statut == 'en_attente' %}
     <div class="detail-section">
+        <h2>⏳ En attente de décision</h2>
+        {% if request.user == echange.annonce.user %}
+        <p>{{ echange.user_demandeur.pseudo }} te propose cet échange.</p>
+        <form method="post" action="{% url 'marketplace:accepter_echange' echange.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">✅ Accepter</button>
+        </form>
+        <form method="post" action="{% url 'marketplace:refuser_echange' echange.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">❌ Refuser</button>
+        </form>
+        {% else %}
+        <p>En attente de la décision de {{ echange.annonce.user.pseudo }}.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if echange.statut == 'refusee' %}
+    <div class="detail-section">
+        <h2>❌ Échange refusé</h2>
+        <p>{{ echange.annonce.user.pseudo }} a refusé cet échange.</p>
+    </div>
+    {% endif %}
+
+    {% if echange.statut == 'acceptee' %}
+    <div class="detail-section">
         <h2>✅ Confirmer l'échange</h2>
         {% if request.user == echange.user_demandeur %}
         {% if echange.confirme_demandeur %}

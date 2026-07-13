@@ -16,43 +16,26 @@
     <p style="color: #666; margin-bottom: 1rem;">
         Pokémon exclusifs à une version, obtenables par échange.
     </p>
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #ede7f6;">
-                <th style="padding: 0.6rem; text-align: left;">Code</th>
-                <th style="padding: 0.6rem; text-align: left;">Tu as</th>
-                <th style="padding: 0.6rem; text-align: left;">Tu reçois</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>0001-0004</td><td>Poussacha</td><td>Chochodile</td></tr>
-            <tr><td>0001-0007</td><td>Poussacha</td><td>Coiffeton</td></tr>
-            <tr><td>0004-0007</td><td>Chochodile</td><td>Coiffeton</td></tr>
-            <tr><td>0399-0400</td><td>Koraidon</td><td>Miraidon</td></tr>
-            <tr><td>0166-0167</td><td>Carmadura</td><td>Malvalame</td></tr>
-            <tr><td>0313-0314</td><td>Gouroutan</td><td>Quartermac</td></tr>
-            <tr><td>0226-0140</td><td>Moufouette</td><td>Gloupti</td></tr>
-            <tr><td>0227-0141</td><td>Moufflair</td><td>Avaltout</td></tr>
-            <tr><td>0143-0114</td><td>Baudrive</td><td>Feuforêve</td></tr>
-            <tr><td>0144-0115</td><td>Grodrive</td><td>Magirêve</td></tr>
-            <tr><td>0276-0316</td><td>Draby</td><td>Embrylex</td></tr>
-            <tr><td>0277-0317</td><td>Drackhaus</td><td>Ymphect</td></tr>
-            <tr><td>0278-0318</td><td>Drattak</td><td>Tyranocif</td></tr>
-            <tr><td>0305-0370</td><td>Fantyrm</td><td>Solochi</td></tr>
-            <tr><td>0306-0371</td><td>Dispareptil</td><td>Diamat</td></tr>
-            <tr><td>0307-0372</td><td>Lanssorien</td><td>Trioxhydre</td></tr>
-            <tr><td>0319-0320</td><td>Dolman</td><td>Bekaglaçon</td></tr>
-            <tr><td>0337-0339</td><td>Venalgue</td><td>Flingouste</td></tr>
-            <tr><td>0338-0340</td><td>Kravarech</td><td>Gamblast</td></tr>
-            <tr><td>0376-0382</td><td>Fort-Ivoire</td><td>Roue-de-Fer</td></tr>
-            <tr><td>0377-0383</td><td>Hurle-Queue</td><td>Hotte-de-Fer</td></tr>
-            <tr><td>0378-0384</td><td>Fongus-Furie</td><td>Paume-de-Fer</td></tr>
-            <tr><td>0379-0385</td><td>Flotte-Mèche</td><td>Têtes-de-Fer</td></tr>
-            <tr><td>0380-0386</td><td>Rampe-Ailes</td><td>Mite-de-Fer</td></tr>
-            <tr><td>0381-0387</td><td>Pelage-Sablé</td><td>Épine-de-Fer</td></tr>
-            <tr><td>0397-0398</td><td>Rugit-Lune</td><td>Gardes-de-Fer</td></tr>
-        </tbody>
-    </table>
+    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 0; margin-top: 1rem;">
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Pokémon A</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Pokémon B</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Code</div>
+
+        {% for item in exclusivites %}
+        {% cycle '#ffffff' 'var(--lavande)' as ligne_bg silent %}
+        <div style="padding: 0.6rem; display: flex; align-items: center; gap: 0.5rem; background: {{ ligne_bg }};">
+            {% if item.sprite1 %}<img src="{{ item.sprite1 }}" width="44" alt="{{ item.nom1 }}">{% endif %}
+            {{ item.nom1 }}
+        </div>
+        <div style="padding: 0.6rem; display: flex; align-items: center; gap: 0.5rem; background: {{ ligne_bg }};">
+            {% if item.sprite2 %}<img src="{{ item.sprite2 }}" width="44" alt="{{ item.nom2 }}">{% endif %}
+            {{ item.nom2 }}
+        </div>
+        <div
+            style="padding: 0.6rem; font-weight: 600; color: var(--violet-fonce); display: flex; align-items: center; background: {{ ligne_bg }};">
+            {{ item.code }}</div>
+        {% endfor %}
+    </div>
 </div>
 
 <div class="card">
@@ -60,46 +43,43 @@
     <p style="color: #666; margin-bottom: 1rem;">
         Équipe l'objet sur ton Pokémon avant l'échange, sinon il n'évoluera pas.
     </p>
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #ede7f6;">
-                <th style="padding: 0.6rem; text-align: left;">Code</th>
-                <th style="padding: 0.6rem; text-align: left;">Tu as</th>
-                <th style="padding: 0.6rem; text-align: left;">Objet</th>
-                <th style="padding: 0.6rem; text-align: left;">Évolution</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>0079-0079</td><td>Ramoloss</td><td>Roche Royale</td><td>Roigada</td></tr>
-            <tr><td>0112-0112</td><td>Rhinoféros</td><td>Protecteur</td><td>Rhinastoc</td></tr>
-            <tr><td>0117-0117</td><td>Hypocéan</td><td>Écaille Draco</td><td>Hyporoi</td></tr>
-            <tr><td>0125-0125</td><td>Élektek</td><td>Électriseur</td><td>Élekable</td></tr>
-            <tr><td>0126-0126</td><td>Magmar</td><td>Magmariseur</td><td>Maganon</td></tr>
-            <tr><td>0137-0137</td><td>Porygon</td><td>Améliorateur</td><td>Porygon2</td></tr>
-            <tr><td>0233-0233</td><td>Porygon2</td><td>CD Douteux</td><td>Porygon-Z</td></tr>
-            <tr><td>0349-0349</td><td>Barpau</td><td>Bel'Écaille</td><td>Milobellus</td></tr>
-            <tr><td>0356-0356</td><td>Téraclope</td><td>Tissu Fauche</td><td>Noctunoir</td></tr>
-        </tbody>
-    </table>
+    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 0;">
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Pokémon</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Objet → Évolution</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Code</div>
+
+        {% for item in evolutions_objet %}
+        {% cycle '#ffffff' 'var(--lavande)' as ligne_bg silent %}
+        <div style="padding: 0.6rem; display: flex; align-items: center; gap: 0.5rem; background: {{ ligne_bg }};">
+            {% if item.sprite %}<img src="{{ item.sprite }}" width="40" alt="{{ item.nom }}">{% endif %}
+            {{ item.nom }}
+        </div>
+        <div style="padding: 0.6rem; display: flex; align-items: center; background: {{ ligne_bg }}; font-size: 0.9rem;">
+            {{ item.objet }} → <strong style="margin-left: 0.3rem;">{{ item.evolution }}</strong>
+        </div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--violet-fonce); display: flex; align-items: center; background: {{ ligne_bg }};">{{ item.code }}</div>
+        {% endfor %}
+    </div>
 </div>
 
 <div class="card">
     <h2 style="color: #4a1472;">✅ Évolutions par échange — sans objet</h2>
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #ede7f6;">
-                <th style="padding: 0.6rem; text-align: left;">Code</th>
-                <th style="padding: 0.6rem; text-align: left;">Tu as</th>
-                <th style="padding: 0.6rem; text-align: left;">Évolution</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>0075-0075</td><td>Gravalanch</td><td>Grolem</td></tr>
-            <tr><td>0075-0075</td><td>Gravalanch Alola</td><td>Grolem Alola</td></tr>
-            <tr><td>0093-0093</td><td>Spectrum</td><td>Ectoplasma</td></tr>
-            <tr><td>0533-0533</td><td>Ouvrifier</td><td>Bétochef</td></tr>
-            <tr><td>0708-0708</td><td>Brocélôme</td><td>Desséliande</td></tr>
-        </tbody>
-    </table>
+    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 0;">
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Pokémon</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Évolution</div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--texte-leger); font-size: 0.85rem;">Code</div>
+
+        {% for item in evolutions_sans_objet %}
+        {% cycle '#ffffff' 'var(--lavande)' as ligne_bg silent %}
+        <div style="padding: 0.6rem; display: flex; align-items: center; gap: 0.5rem; background: {{ ligne_bg }};">
+            {% if item.sprite %}<img src="{{ item.sprite }}" width="40" alt="{{ item.nom }}">{% endif %}
+            {{ item.nom }}
+        </div>
+        <div style="padding: 0.6rem; display: flex; align-items: center; background: {{ ligne_bg }}; font-weight: 600;">
+            {{ item.evolution }}
+        </div>
+        <div style="padding: 0.6rem; font-weight: 600; color: var(--violet-fonce); display: flex; align-items: center; background: {{ ligne_bg }};">{{ item.code }}</div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

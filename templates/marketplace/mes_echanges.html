@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load marketplace_extras %}
+{% block title %}Mes échanges — PokéMarket{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>📋 Mes échanges</h1>
+
+    {% if echanges %}
+    {% for echange in echanges %}
+    <div class="detail-section">
+        {% with pokemon=cache|get_item:echange.annonce.pokemon_cherche_id %}
+        <p>
+            {% if pokemon %}<img src="{{ pokemon.sprite_url }}" width="32" alt="{{ pokemon.nom_fr }}">{% endif %}
+            Échange avec <strong>{{ echange.annonce.user.pseudo }}</strong>
+            {% if pokemon %}pour <strong>{{ pokemon.nom_fr }}</strong>{% endif %}
+        </p>
+        {% endwith %}
+        <p>
+            {% if echange.statut == 'en_attente' %}⏳ En attente de réponse
+            {% elif echange.statut == 'acceptee' %}✅ Accepté — en attente de confirmation finale
+            {% elif echange.statut == 'refusee' %}❌ Refusé
+            {% elif echange.statut == 'confirme' %}🎉 Échange terminé
+            {% endif %}
+        </p>
+        <a href="{% url 'marketplace:detail_echange' echange.pk %}">Voir →</a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>Tu n'as pas encore proposé d'échange.</p>
+    {% endif %}
+</div>
+{% endblock %}
