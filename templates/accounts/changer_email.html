@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Changer mon email — PokéMarket{% endblock %}
+{% block content %}
+<div class="detail-section">
+    <h2>📧 Changer mon email</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <p class="error-text">{{ field.errors|first }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <button type="submit" class="btn">💾 Enregistrer</button>
+            <a href="{% url 'auth:profil' %}" class="btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

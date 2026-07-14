@@ -46,3 +46,22 @@ class InscriptionForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ChangerEmailForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'ton@email.com'}),
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.exclude(pk=self.instance.pk).filter(
+            email=email
+        ).exists():
+            raise forms.ValidationError(
+                "Cet email est déjà utilisé par un autre compte."
+            )
+        return email

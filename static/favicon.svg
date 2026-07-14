@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="circleClip">
+      <circle cx="60" cy="60" r="56" />
+    </clipPath>
+  </defs>
+
+  <!-- Moitié haute : violet pâle -->
+  <g clip-path="url(#circleClip)">
+    <rect x="0" y="0" width="120" height="60" fill="#c9a8e3" />
+    <rect x="0" y="60" width="120" height="60" fill="#ffffff" />
+  </g>
+
+  <!-- Contour du cercle -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#2b2b2b" stroke-width="4" />
+
+  <!-- Ligne médiane -->
+  <rect x="4" y="54" width="112" height="12" fill="#2b2b2b" />
+
+  <!-- Bouton central -->
+  <circle cx="60" cy="60" r="16" fill="#ffffff" stroke="#2b2b2b" stroke-width="4" />
+  <circle cx="60" cy="60" r="7" fill="#c9a8e3" />
+</svg>

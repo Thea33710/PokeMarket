@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from pokedex.models import PokemonCache, Jeu
 from marketplace.models import Echange
-from .forms import InscriptionForm
+from .forms import InscriptionForm, ChangerEmailForm
 from .models import User
 
 
@@ -147,4 +147,37 @@ def profil(request):
         'jeux': Jeu.objects.all(),
         'mode_edition': request.GET.get('edit') == '1',
         'cache': cache,
+    })
+
+
+@login_required
+def changer_mot_de_passe(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Mot de passe modifié ! 🔒")
+            return redirect('auth:profil')
+        else:
+            messages.error(request, "Vérifie les champs ci-dessous.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/changer_mot_de_passe.html', {
+        'form': form,
+    })
+
+
+@login_required
+def changer_email(request):
+    if request.method == 'POST':
+        form = ChangerEmailForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Email modifié ! 📧")
+            return redirect('auth:profil')
+    else:
+        form = ChangerEmailForm(instance=request.user)
+    return render(request, 'accounts/changer_email.html', {
+        'form': form,
     })

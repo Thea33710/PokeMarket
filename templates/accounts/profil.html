@@ -104,6 +104,14 @@
     </div>
 </form>
 
+<div class="detail-section">
+    <h2>🔐 Sécurité du compte</h2>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'auth:changer_mot_de_passe' %}" class="btn-secondary">🔒 Changer mon mot de passe</a>
+        <a href="{% url 'auth:changer_email' %}" class="btn-secondary">📧 Changer mon email</a>
+    </div>
+</div>
+
 {% else %}
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">

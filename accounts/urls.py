@@ -42,4 +42,10 @@ urlpatterns = [
     ), name='mdp_reset_termine'),
 
     path('profil/', views.profil, name='profil'),
+    path(
+        'changer-mot-de-passe/',
+        views.changer_mot_de_passe,
+        name='changer_mot_de_passe'
+    ),
+    path('changer-email/', views.changer_email, name='changer_email'),
 ]
